@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
  * Created by Master Victor on 23/06/2015.
  */
 @Embeddable
-public class Client {
+public class CarOwner {
 
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
@@ -20,17 +20,27 @@ public class Client {
 
     @Column(name = "EMAIL")
     private String email;
-
     @Column(name = "TELEPHONE_NO", nullable = false)
     private String telephoneNumber;
 
-    public Client() {
+    public CarOwner() {
     }
 
-    public Client(String firstName, String lastName, String telephoneNumber) {
+    public CarOwner(String firstName, String lastName, String telephoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.telephoneNumber = telephoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "CarOwner{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", email='" + email + '\'' +
+                ", telephoneNumber='" + telephoneNumber + '\'' +
+                '}';
     }
 
     public String getEmail() {

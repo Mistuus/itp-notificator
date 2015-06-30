@@ -2,7 +2,9 @@ package org.phantom.notificator.domain;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
@@ -13,15 +15,18 @@ import java.util.List;
 /**
  * Created by Master Victor on 27/06/2015.
  */
+@SuppressWarnings("unchecked")
 public class HibernateAndH2Test {
-    private SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
 
     @Before
     public void setUp() throws Exception {
         // A SessionFactory is set up once for an application
-        sessionFactory = new Configuration()
-                .configure() // configures settings from hibernate.cfg.xml
-                .buildSessionFactory();
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).build();
+        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
     }
 
     @After
@@ -36,8 +41,8 @@ public class HibernateAndH2Test {
         // create a couple of events...
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Client mihClient = new Client("Mihnea", "Patentasu", "077777777");
-        session.save(new Car("B 725 MIH", new LocalDate(2014, 10, 5), mihClient));
+        CarOwner mihCarOwner = new CarOwner("Mihnea", "Patentasu", "077777777");
+        session.save(new Car("B 725 MIH", new LocalDate(2014, 10, 5), mihCarOwner));
         session.getTransaction().commit();
         session.close();
 
@@ -46,7 +51,7 @@ public class HibernateAndH2Test {
         session.beginTransaction();
         List<Car> result = session.createQuery("from Car").list();
         for (Car car : result) {
-            System.out.println("Client: " + car.getClient().getFirstName() + " " + car.getClient().getLastName() + ", masina: " + car.getCarRegistrationNumber());
+            System.out.println("CarOwner: " + car.getCarOwner().getFirstName() + " " + car.getCarOwner().getLastName() + ", masina: " + car.getCarRegistrationNumber());
         }
         session.getTransaction().commit();
         session.close();
