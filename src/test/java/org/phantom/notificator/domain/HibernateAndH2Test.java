@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -17,13 +18,28 @@ import java.util.List;
  */
 @SuppressWarnings("unchecked")
 public class HibernateAndH2Test {
+    public static final String URL_PREFIX = "jdbc:h2:file:";
+    public static final String URL_SUFFIX = ";DB_CLOSE_DELAY=10;IFEXISTS=TRUE;";
+    public static final String DB_FILE_NAME = "vectorDB.mv.db";
     private static SessionFactory sessionFactory;
 
     @Before
     public void setUp() throws Exception {
         // A SessionFactory is set up once for an application
+        URL resource = getClass().getClassLoader().getResource(DB_FILE_NAME);
+        String absolutePath;
+        if (resource != null) {
+            absolutePath = resource.getPath();
+            // remove the first character, '\' and the suffix '.mv.db'
+        } else {
+            throw new RuntimeException("File " + DB_FILE_NAME + " cannot be found. Check the file exists!");
+        }
+        String dbFilePath = absolutePath.substring(1, absolutePath.indexOf(".mv.db"));
+
         Configuration configuration = new Configuration();
+        configuration.getProperties().setProperty("hibernate.connection.url", URL_PREFIX + dbFilePath + URL_SUFFIX);
         configuration.configure();
+
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
         sessionFactory = configuration.buildSessionFactory(serviceRegistry);

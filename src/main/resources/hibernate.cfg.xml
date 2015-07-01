@@ -32,9 +32,12 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.h2.Driver</property>
-        <property name="connection.url">jdbc:h2:tcp://localhost/~/test</property>
-        <property name="connection.username">sa</property>
-        <property name="connection.password"></property>
+
+        <!-- todo: determine if we should define the file in here or look it up dynamically -->
+        <!--<property name="connection.url">jdbc:h2:file:E:\Projects\itp-notificator\src\main\resources\vectorDB;DB_CLOSE_DELAY=10;IFEXISTS=TRUE;</property>-->
+
+        <property name="connection.username">vector</property>
+        <property name="connection.password"/>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
