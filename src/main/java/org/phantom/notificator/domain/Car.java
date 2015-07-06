@@ -32,6 +32,7 @@ public class Car {
     @ManyToOne(fetch = FetchType.LAZY, cascade =
             {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @NotNull(message = "Car must have an owner")
     private CarOwner carOwner;
 
     public Car() {
