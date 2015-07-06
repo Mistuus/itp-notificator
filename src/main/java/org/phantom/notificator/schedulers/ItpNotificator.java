@@ -4,8 +4,8 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
-import org.phantom.notificator.senders.EmailSender;
-import org.phantom.notificator.senders.SmsSender;
+import org.phantom.notificator.services.EmailSender;
+import org.phantom.notificator.services.SmsSender;
 
 import java.util.List;
 import java.util.Map;
