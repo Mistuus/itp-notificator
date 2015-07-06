@@ -1,46 +1,56 @@
 package org.phantom.notificator.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.validator.constraints.Email;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Master Victor on 23/06/2015.
  */
-@Embeddable
+@Entity
+@Table(name = "CAR_OWNERS")
 public class CarOwner {
 
-    @Column(name = "FIRST_NAME", nullable = false)
+    @Column(name = "FIRST_NAME")
+    @NotNull(message = "First Name must not be null")
     private String firstName;
 
-    @Column(name = "LAST_NAME", nullable = false)
+    @Column(name = "LAST_NAME")
+    @NotNull(message = "Last Name must not be null")
     private String lastName;
 
     @Column(name = "COMPANY_NAME")
     private String companyName;
 
     @Column(name = "EMAIL")
+    @Email
     private String email;
-    @Column(name = "TELEPHONE_NO", nullable = false)
+
+    @Id
+    @Column(name = "TELEPHONE_NO", nullable = false, unique = true)
+    @Size(min = 10, max = 13,
+            message = "Telephone number must be between 10 and 13 characters")
     private String telephoneNumber;
 
-    public CarOwner() {
+    @OneToMany(mappedBy = "carOwner",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    private Set<Car> cars = new HashSet<>();
+
+    protected CarOwner() {
     }
 
     public CarOwner(String firstName, String lastName, String telephoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.telephoneNumber = telephoneNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "CarOwner{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", companyName='" + companyName + '\'' +
-                ", email='" + email + '\'' +
-                ", telephoneNumber='" + telephoneNumber + '\'' +
-                '}';
     }
 
     public String getEmail() {
@@ -55,7 +65,7 @@ public class CarOwner {
         return telephoneNumber;
     }
 
-    public void setTelephoneNumber(String telephoneNumber) {
+    private void setTelephoneNumber(String telephoneNumber) {
         this.telephoneNumber = telephoneNumber;
     }
 
@@ -81,5 +91,45 @@ public class CarOwner {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public Set<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(Set<Car> cars) {
+        this.cars = cars;
+    }
+
+    public void addCar(Car car) {
+        car.setCarOwner(this);
+        getCars().add(car);
+    }
+
+    public void removeCar(Car car) {
+        car.setCarOwner(null);
+        getCars().remove(car);
+    }
+
+    @Override
+    public String toString() {
+        return "CarOwner{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", email='" + email + '\'' +
+                ", telephoneNumber='" + telephoneNumber + '\'' +
+                ", cars=" + cars +
+                '}';
+    }
+
+    public String toStringWithoutOwnedCars() {
+        return "CarOwner{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", email='" + email + '\'' +
+                ", telephoneNumber='" + telephoneNumber + '\'' +
+                '}';
     }
 }

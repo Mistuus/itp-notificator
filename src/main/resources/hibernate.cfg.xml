@@ -34,13 +34,17 @@
         <property name="connection.driver_class">org.h2.Driver</property>
 
         <!-- todo: determine if we should define the file in here or look it up dynamically -->
-        <!--<property name="connection.url">jdbc:h2:file:E:\Projects\itp-notificator\src\main\resources\vectorDB;DB_CLOSE_DELAY=10;IFEXISTS=TRUE;</property>-->
+        <!-- todo: read the following: DB_CLOSE_DELAY=10;-->
+        <!--<property name="connection.url">jdbc:h2:file:E:\Projects\itp-notificator\src\main\resources\vectorDB;IFEXISTS=TRUE;</property>-->
 
         <property name="connection.username">vector</property>
         <property name="connection.password"/>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
+
+        <!-- Displays the hibernate generated SQL in the LOGS-->
+        <property name="hibernate.show_sql">true</property>
 
         <!-- Enable Hibernate's automatic session context management -->
         <!--<property name="current_session_context_class">thread</property>-->
@@ -60,6 +64,7 @@
 
         <!-- Names the annotated entity class -->
         <mapping class="org.phantom.notificator.domain.Car"/>
+        <mapping class="org.phantom.notificator.domain.CarOwner"/>
 
     </session-factory>
 

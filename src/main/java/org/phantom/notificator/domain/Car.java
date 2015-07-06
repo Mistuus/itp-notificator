@@ -1,10 +1,13 @@
 package org.phantom.notificator.domain;
 
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Length;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Master Victor on 23/06/2015.
@@ -14,14 +17,22 @@ import javax.persistence.*;
 public class Car {
 
     @Id
-    @Column(name = "CAR_REGISTRATION_NUMBER")
+    @Column(name = "CAR_REGISTRATION_NUMBER",
+            nullable = false,
+            unique = true)
+    @Length(min = 8, max = 10,
+            message = "Car Registration Number must be between 8 and 10 characters")
     private String carRegistrationNumber;
 
     @Column(name = "ITP_EXPIRY_DATE")
+    @NotNull(message = "ITP Expiry Date must not be null")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate itpExpiryDate;
-    @Embedded
-    private CarOwner thisCarOwner;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade =
+            {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    private CarOwner carOwner;
 
     public Car() {
     }
@@ -29,7 +40,7 @@ public class Car {
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate, CarOwner carOwner) {
         this.carRegistrationNumber = carRegistrationNumber;
         this.itpExpiryDate = itpExpiryDate;
-        this.thisCarOwner = carOwner;
+        this.carOwner = carOwner;
     }
 
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate, String firstName, String lastName, String telephoneNo) {
@@ -41,7 +52,7 @@ public class Car {
         return "Car{" +
                 "carRegistrationNumber='" + carRegistrationNumber + '\'' +
                 ", itpExpiryDate=" + itpExpiryDate +
-                ", thisCarOwner=" + thisCarOwner +
+                ", carOwner=" + carOwner.toStringWithoutOwnedCars() +
                 '}';
     }
 
@@ -62,10 +73,10 @@ public class Car {
     }
 
     public CarOwner getCarOwner() {
-        return thisCarOwner;
+        return carOwner;
     }
 
     public void setCarOwner(CarOwner carOwner) {
-        this.thisCarOwner = carOwner;
+        this.carOwner = carOwner;
     }
 }
