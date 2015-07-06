@@ -34,7 +34,7 @@
         <property name="connection.driver_class">org.h2.Driver</property>
 
         <!-- todo: determine if we should define the file in here or look it up dynamically -->
-        <!-- todo: read the following: DB_CLOSE_DELAY=10;-->
+        <!-- todo: add the following once ready for prod release: DB_CLOSE_DELAY=10;-->
         <!--<property name="connection.url">jdbc:h2:file:E:\Projects\itp-notificator\src\main\resources\vectorDB;IFEXISTS=TRUE;</property>-->
 
         <property name="connection.username">vector</property>
@@ -47,7 +47,7 @@
         <property name="hibernate.show_sql">true</property>
 
         <!-- Enable Hibernate's automatic session context management -->
-        <!--<property name="current_session_context_class">thread</property>-->
+        <property name="current_session_context_class">thread</property>
 
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
