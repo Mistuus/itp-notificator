@@ -8,7 +8,6 @@ import org.joda.time.LocalDate;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.schedulers.ItpNotificator;
-import org.phantom.notificator.util.HibernateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +37,6 @@ public abstract class AbstractTestEnvironmentSetup {
     public static Car mihneasOtherCarWithUpcomingItp;
     public static Car bunusCar;
     public static Car danielsCar;
-
-    public static SessionFactory sessionFactory;
 
     public static List<CarOwner> carOwners;
     public static List<Car> cars;
@@ -95,16 +92,15 @@ public abstract class AbstractTestEnvironmentSetup {
         carOwners = Arrays.asList(victor, mihnea, daniel, bunu);
     }
 
-    protected static void setUpCarsAndOwnersInDb() {
+    protected static void setUpCarsAndOwnersInDbAndOpenSession(SessionFactory sessionFactory) {
         LOGGER.info(" ---->>>> DB SETUP: Persisting Cars and Owners to DB <<<<----");
 
-        sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.getCurrentSession();
-        Transaction txt = session.beginTransaction();
+        Transaction txt = null;
         try {
-
+            txt = session.beginTransaction();
             for (CarOwner carOwner : carOwners) {
-                session.save(carOwner);
+                session.persist(carOwner);
             }
             txt.commit();
             LOGGER.info("---->>>> FINISHED DB SETUP: All owners and cars persisted to DB <<<<----");
@@ -113,33 +109,38 @@ public abstract class AbstractTestEnvironmentSetup {
 
             LOGGER.error("---->>>> Error occurred when adding clients !! Rolling back. <<<<----");
             e.printStackTrace();
-            txt.rollback();
-
+            if (txt != null) {
+                txt.rollback();
+            }
         }
     }
 
-    protected static void removeCarsAndOwnersFromDb() {
+    protected static void removeCarsAndOwnersFromDbAndCloseSession(SessionFactory sessionFactory) {
         if (sessionFactory == null) {
-            throw new RuntimeException("SessionFactory is null!! Have you called setUpCarsAndOwnersInDb?");
+            throw new RuntimeException("SessionFactory is null!! Have you called setUpCarsAndOwnersInDbAndOpenSession?");
         }
 
         LOGGER.info(" ---->>>> Removing Cars and Owners from DB <<<<----");
         Session session = sessionFactory.getCurrentSession();
-        Transaction txt = session.beginTransaction();
+        Transaction txt = null;
         try {
-
+            txt = session.beginTransaction();
             for (CarOwner carOwner : carOwners) {
                 session.delete(carOwner);
             }
             txt.commit();
             LOGGER.info("---->>>> All cars and owners removed from DB! <<<<----");
-
         } catch (Exception e) {
 
             LOGGER.error("---->>>> Error occurred while removing clients !! Rolling back. <<<<----");
             e.printStackTrace();
-            txt.rollback();
-            session.close();
+            if (txt != null) {
+                txt.rollback();
+            }
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
         }
     }
 }
