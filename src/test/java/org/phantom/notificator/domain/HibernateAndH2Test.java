@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.phantom.notificator.util.HibernateUtil;
+import org.phantom.notificator.util.MockedHibernateUtil;
 
 import java.util.List;
 
@@ -21,15 +21,9 @@ public class HibernateAndH2Test {
     public static final String DB_FILE_NAME = "vectorDB.mv.db";
     private static SessionFactory sessionFactory;
 
-    // todo: Test saving
-    // todo: Test updating
-    // todo: test deleting one car out of 2
-    // todo: test deleting both cars
-    // todo: test deleting the car owner of two cars
-    // todo: test validation of object
     @Before
     public void setUp() throws Exception {
-        sessionFactory = HibernateUtil.getSessionFactory();
+        sessionFactory = MockedHibernateUtil.getSessionFactory();
     }
 
     @After

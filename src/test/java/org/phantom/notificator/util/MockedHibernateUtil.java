@@ -8,17 +8,20 @@ import org.hibernate.service.ServiceRegistry;
 import java.net.URL;
 
 /**
- * Created by Master Victor on 03/07/2015.
- * This class is used to create only one session factory per application and to handle the
- * Hibernate Session.
- *
- * Use MockedHibernateUtil
+ * Created by Master Victor on 07/07/2015.
  */
-public class HibernateUtil {
+public class MockedHibernateUtil {
 
-    private static final String PROD_DB_FILE_NAME = "vectorDB.mv.db";
+    // todo: Determine the best way of using different DB configuration for PROD vs DEV
+    // 1) Spring
+    // 2) persistence.xml
+    // 3) Maven profiles
+    // 4) DBUTILS
+    // 5) Instance of HibernateUtils
+
+    private static final String TESTING_DB_FILE_NAME = "vectorDBForTesting.mv.db";
     private static final String URL_PREFIX = "jdbc:h2:file:";
-    private static final String URL_SUFFIX = ";IFEXISTS=TRUE;DB_CLOSE_DELAY=10;";
+    private static final String URL_SUFFIX = ";IFEXISTS=TRUE;";
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     public static SessionFactory getSessionFactory() {
@@ -44,7 +47,7 @@ public class HibernateUtil {
     }
 
     private static String getDbFilePath() {
-        URL resource = HibernateUtil.class.getClassLoader().getResource(PROD_DB_FILE_NAME);
+        URL resource = HibernateUtil.class.getClassLoader().getResource(TESTING_DB_FILE_NAME);
         String absolutePath;
 
         if (resource != null) {
@@ -52,8 +55,7 @@ public class HibernateUtil {
             // remove the first character, '\' and the suffix '.mv.db'
             return absolutePath.substring(1, absolutePath.indexOf(".mv.db"));
         } else {
-            throw new RuntimeException("File " + PROD_DB_FILE_NAME + " cannot be found. Check the file exists!");
+            throw new RuntimeException("File " + TESTING_DB_FILE_NAME + " cannot be found. Check the file exists!");
         }
     }
-
 }
