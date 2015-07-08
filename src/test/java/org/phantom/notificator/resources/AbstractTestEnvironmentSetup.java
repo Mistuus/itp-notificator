@@ -126,7 +126,10 @@ public abstract class AbstractTestEnvironmentSetup {
         try {
             txt = session.beginTransaction();
             for (CarOwner carOwner : carOwners) {
-                session.delete(carOwner);
+                Object persistedCarOwner = session.get(CarOwner.class, carOwner.getTelephoneNumber());
+                if (persistedCarOwner != null) {
+                    session.delete(persistedCarOwner);
+                }
             }
             txt.commit();
             LOGGER.info("---->>>> All cars and owners removed from DB! <<<<----");
