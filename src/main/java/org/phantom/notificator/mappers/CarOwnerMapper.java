@@ -5,27 +5,25 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.phantom.notificator.domain.CarOwner;
+import org.phantom.notificator.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.Set;
 
 /**
  * Created by Master Victor on 06/07/2015.
+ *
+ * todo: Instead of catching the exceptions or the validation errors.
+ * todo: Make the methods throw them and catch them when needed.
  */
 public class CarOwnerMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarOwnerMapper.class);
-    private final Validator validator;
     private final SessionFactory sessionFactory;
 
     public CarOwnerMapper(SessionFactory sessionFactory) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
         this.sessionFactory = sessionFactory;
     }
 
@@ -34,7 +32,7 @@ public class CarOwnerMapper {
     }
 
     public Set<ConstraintViolation<CarOwner>> getValidationErrors(CarOwner carOwner) {
-        return validator.validate(carOwner);
+        return ValidationUtil.getValidator().validate(carOwner);
     }
 
     public boolean isCarOwnerInDb(CarOwner carOwner) {
@@ -43,7 +41,7 @@ public class CarOwnerMapper {
 
     public boolean isNumberInDb(String carOwnerTelephoneNo) {
         Set<ConstraintViolation<CarOwner>> telephoneNumberValidationErrors =
-                validator.validateValue(CarOwner.class, "telephoneNumber", carOwnerTelephoneNo);
+                ValidationUtil.getValidator().validateValue(CarOwner.class, "telephoneNumber", carOwnerTelephoneNo);
 
         if (telephoneNumberValidationErrors.size() != 0) {
             return false;
