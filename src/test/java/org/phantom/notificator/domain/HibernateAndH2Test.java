@@ -16,9 +16,6 @@ import java.util.List;
  */
 @SuppressWarnings("unchecked")
 public class HibernateAndH2Test {
-    public static final String URL_PREFIX = "jdbc:h2:file:";
-    public static final String URL_SUFFIX = ";DB_CLOSE_DELAY=10;IFEXISTS=TRUE;";
-    public static final String DB_FILE_NAME = "vectorDB.mv.db";
     private static SessionFactory sessionFactory;
 
     @Before

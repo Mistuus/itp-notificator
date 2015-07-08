@@ -2,10 +2,10 @@ package org.phantom.notificator.domain;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,8 +32,9 @@ public class CarOwner {
     private String email;
 
     @Id
-    @Column(name = "TELEPHONE_NO", nullable = false, unique = true)
-    @Size(min = 10, max = 13,
+    @Column(name = "TELEPHONE_NO")
+    @NotNull(message = "Telephone Number cannot be null")
+    @Length(min = 10, max = 13,
             message = "Telephone number must be between 10 and 13 characters")
     private String telephoneNumber;
 
@@ -131,5 +132,24 @@ public class CarOwner {
                 ", email='" + email + '\'' +
                 ", telephoneNumber='" + telephoneNumber + '\'' +
                 '}';
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getTelephoneNumber() == null) {
+            return false;
+        }
+
+        if (!(obj instanceof CarOwner)) {
+            return false;
+        }
+
+        return ((CarOwner) obj).getTelephoneNumber().equals(this.getTelephoneNumber());
+
     }
 }
