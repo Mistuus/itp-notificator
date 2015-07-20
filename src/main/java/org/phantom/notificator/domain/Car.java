@@ -17,11 +17,10 @@ import javax.validation.constraints.NotNull;
 public class Car {
 
     @Id
-    @Column(name = "CAR_REGISTRATION_NUMBER",
-            nullable = false,
-            unique = true)
+    @Column(name = "CAR_REGISTRATION_NUMBER")
     @Length(min = 8, max = 10,
             message = "Car Registration Number must be between 8 and 10 characters")
+    @NotNull(message = "Telephone Number cannot be null")
     private String carRegistrationNumber;
 
     @Column(name = "ITP_EXPIRY_DATE")
@@ -42,6 +41,10 @@ public class Car {
         this.carRegistrationNumber = carRegistrationNumber;
         this.itpExpiryDate = itpExpiryDate;
         this.carOwner = carOwner;
+    }
+
+    public Car(String carRegistrationNumber, LocalDate itpExpiryDate) {
+        this(carRegistrationNumber, itpExpiryDate, null);
     }
 
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate, String firstName, String lastName, String telephoneNo) {
@@ -79,5 +82,23 @@ public class Car {
 
     public void setCarOwner(CarOwner carOwner) {
         this.carOwner = carOwner;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getCarRegistrationNumber() == null) {
+            return false;
+        }
+
+        if (!(obj instanceof Car)) {
+            return false;
+        }
+
+        Car other = (Car) obj;
+        return this.getCarRegistrationNumber().equals(other.getCarRegistrationNumber());
     }
 }

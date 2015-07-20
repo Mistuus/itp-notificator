@@ -172,11 +172,13 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
     @Test
     public void testRemoveExistingCarOwner() throws Exception {
         Assert.assertTrue(mapper.removeCarOwner(victor));
-        checkNotPresentInDBAndAdd(victor);
+        CarOwner deletedVictor = retrieveCarOwner(victor);
+        Assert.assertNull(deletedVictor);
+        addToDb(victor);
     }
 
     @Test
-    public void testRemoveNewCarOwner() throws Exception {
+    public void testDoNotRemoveNonExistentCarOwner() throws Exception {
         CarOwner newCarOwner = new CarOwner("V", "P", "9876543210");
         Assert.assertFalse(mapper.removeCarOwner(newCarOwner));
     }
@@ -189,16 +191,24 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
     @Test
     public void testRemoveExistingCarOwnerByTelephoneNo() {
         Assert.assertTrue(mapper.removeCarOwner(victor.getTelephoneNumber()));
-        checkNotPresentInDBAndAdd(victor);
+        CarOwner deletedVictor = retrieveCarOwner(victor);
+        Assert.assertNull(deletedVictor);
+        addToDb(victor);
     }
 
     @Test
     public void testChangeDetailsForExistingOwner() {
         String oldEmail = victor.getEmail();
-        victor.setEmail("vp@yahoo.com");
+        String newEmail = "vp@yahoo.com";
+
+        victor.setEmail(newEmail);
         Assert.assertTrue(mapper.changeDetails(victor));
+
+        CarOwner updatedVictor = retrieveCarOwner(victor);
+        Assert.assertEquals(newEmail, updatedVictor.getEmail());
+
         victor.setEmail(oldEmail);
-        Assert.assertTrue(mapper.changeDetails(victor));
+        updateCarOwner(victor);
     }
 
     @Test
@@ -207,14 +217,43 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
         Assert.assertFalse(mapper.changeDetails(newCarOwner));
     }
 
-    private void checkNotPresentInDBAndAdd(CarOwner carOwner) {
+    private void deleteCarOwner(CarOwner newCarOwner) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = currentSession.beginTransaction();
+            currentSession.delete(newCarOwner);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
+        }
+    }
+
+    private CarOwner retrieveCarOwner(CarOwner carOwner) {
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         Object nonExistentOwner;
         try {
             transaction = currentSession.beginTransaction();
             nonExistentOwner = currentSession.get(CarOwner.class, carOwner.getTelephoneNumber());
-            Assert.assertNull(nonExistentOwner);
+            transaction.commit();
+            return (CarOwner) nonExistentOwner;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
+        }
+    }
+
+    private void addToDb(CarOwner carOwner) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = currentSession.beginTransaction();
             currentSession.persist(carOwner);
             transaction.commit();
         } catch (Exception e) {
@@ -225,12 +264,27 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
         }
     }
 
-    private void deleteCarOwner(CarOwner newCarOwner) {
+    private void removeCar(CarOwner carOwner) {
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
             transaction = currentSession.beginTransaction();
-            currentSession.delete(newCarOwner);
+            currentSession.delete(carOwner);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
+        }
+    }
+
+    private void updateCarOwner(CarOwner carOwner) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = currentSession.beginTransaction();
+            currentSession.update(carOwner);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

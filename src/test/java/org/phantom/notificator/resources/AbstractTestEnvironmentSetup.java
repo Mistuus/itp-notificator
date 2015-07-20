@@ -40,11 +40,12 @@ public abstract class AbstractTestEnvironmentSetup {
 
     public static List<CarOwner> carOwners;
     public static List<Car> cars;
+    public static LocalDate currentDateForTest;
 
     public static void setUpCarsAndOwnersWithoutPersistingToDb() {
         LOGGER.info("---->>>> SETTING UP TEST ENVIRONMENT (No DB Setup)<<<<----");
         daysToNotifyInAdvance = Days.FIVE;
-        LocalDate currentDateForTest = new LocalDate(2015, 6, 29);
+        currentDateForTest = new LocalDate(2015, 6, 29);
 
         setUpCarOwners();
         LOGGER.info("---->>>> Car Owners Configured!! <<<<----");
