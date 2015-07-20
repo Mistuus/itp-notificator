@@ -1,0 +1,89 @@
+------------------------------ Defining the h2 URL: ------------------------------
+1) Use "<prefixURL>;IFEXISTS=TRUE" - only opens the DB if it exists, i.e. stops it from creating another
+
+2) Use "<prefixURL>;DB_CLOSE_DELAY=10" - delay closing the DB after the last connection (does not slow down the application)
+
+3) [Optional - only if designed for web] Encrypt the DB using "<prefixURL>;CIPHER=AES"   
+
+4) Running in Embedded Mode - Use 
+	"jdbc:h2:[file:][<path>]<databaseName>"
+	e.g. jdbc:h2:file:C:/data/sample (Windows only)
+		 jdbc:h2:~/test
+		 jdbc:h2:file:/data/sample
+
+5) [Optional - to backup data] - Use "<prefixURL>;INIT=runscript from '~/create.sql'\\;runscript from '~/init.sql'" (this has multiple scrips made to run separated by the escaped semicolon \\;)
+
+---------------- Steps to correctly instantiate a bi-directional relationship --------------
+
+To persist all the objects correctly you’ll need to follow these generic steps:
+
+Instantiate/Load parent object
+Instantiate/Load child objects
+Set the parent object in the child objects
+Create a collection of child objects
+Set the collection of child objects on the parent
+Save the parent
+
+
+------------------------------ To find out ---------------------------------------------
+
+ a. Composite Primary Key
+ b. Cascade Types
+ c. What do the following do:  [http://www.journaldev.com/3481/hibernate-save-vs-saveorupdate-vs-persist-vs-merge-vs-update-explanation-with-examples]
+ 	- save()
+ 	- delete()
+ 	- persist()
+ 	- commit()
+ 	- flush()
+ 	- merge()
+ 	- open() vs close()
+ d. Generation Strategies
+ e. Collections 
+
+
+ 	<property name="hibernate.show_sql">true</property>
+
+ ------------------------------ save() ---------------------------------------------
+
+ We can invoke this method outside a transaction, that’s why I don’t like this method to save data. If we use this without transaction and we have cascading between entities, then only the primary entity gets saved unless we flush the session.
+
+ ------------------------------ persist() ---------------------------------------------
+
+ Hibernate persist is similar to save (with transaction) and it adds the entity object to the persistent context, so any further changes are tracked. If the object properties are changed before the transaction is committed or session is flushed, it will also be saved into database.
+
+Second difference is that we can use persist() method only within the boundary of a transaction, so it’s safe and takes care of any cascaded objects.
+
+Finally, persist doesn’t return anything so we need to use the persisted object to get the generated identifier value. Let’s look at hibernate persist with a simple program.
+
+ ------------------------------ saveOrUpdate() ---------------------------------------------
+
+ Hibernate saveOrUpdate results into insert or update queries based on the provided data. If the data is present in the database, update query is executed.
+
+We can use saveOrUpdate() without transaction also, but again you will face the issues with mapped objects not getting saved if session is not flushed.
+
+One important difference between save and saveOrUpdate is that it adds the entity object to persistent context and track any further changes. Any further changes are saved at the time of committing transaction, like persist.
+
+------------------------------ update() ---------------------------------------------
+
+Hibernate update should be used where we know that we are only updating the entity information. This operation adds the entity object to persistent context and further changes are tracked and saved when transaction is committed. Let’s check this behavior with a simple program.
+
+------------------------------ merge() ---------------------------------------------
+
+Hibernate merge can be used to update existing values, however this method create a copy from the passed entity object and return it. The returned object is part of persistent context and tracked for any changes, passed object is not tracked. This is the major difference with merge() from all other methods. Let’s look at this with a simple program.
+
+££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££££
+
+[PERSONAL NOTES] 
+- persist() should be used instead of save(); First is allowed only in transactions. (save() guarantees ID is set when called. persist() might give ID when commit() or flush() is called)
+
+- saveOrUpdate() (is allowed outside transactions) should be used inside transactions. It changes an object in persistent state after use.
+
+- merge() returns a copy of the merged object. This copy then becomes in persistent state and is tracket. The original object (which we got the copy out of) is not tracked anymore.
+
+- Use get() instead of load(). The first is good for finding out if an object is in the DB, as it returns NULL if it isn't. Load just gives a reference and throws an exception if object doesn't exist. (load() is useful for lazy initialization.)
+
+- When the hibernate.cfg.xml files has the following property:
+		        <property name="current_session_context_class">thread</property>
+    Then Hibernate will close the session for you right after you do "transaction.commit()" => Do not close the session or you will get an exception.
+
+- use flush() when we want to commit existing data from the 1st level hibernate cache. Or when we want an id assigned to our *newly* persisted entity
