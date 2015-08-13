@@ -14,9 +14,9 @@ import java.util.Set;
 
 /**
  * Created by Master Victor on 06/07/2015.
- *
- * todo: Instead of catching the exceptions or the validation errors.
- * todo: Make the methods throw them and catch them when needed.
+ * <p>
+ * todo: Instead of catching the exceptions or the validation errors
+ * todo: make the methods throw them and catch them when needed.
  */
 public class CarOwnerMapper {
 
@@ -28,11 +28,8 @@ public class CarOwnerMapper {
     }
 
     public boolean isValidCarOwner(CarOwner carOwner) {
-        return getValidationErrors(carOwner).isEmpty();
-    }
-
-    public Set<ConstraintViolation<CarOwner>> getValidationErrors(CarOwner carOwner) {
-        return ValidationUtil.getValidator().validate(carOwner);
+        Set<ConstraintViolation<CarOwner>> validationErrorsSet = ValidationUtil.getValidator().validate(carOwner);
+        return validationErrorsSet.isEmpty();
     }
 
     public boolean isCarOwnerInDb(CarOwner carOwner) {
@@ -58,7 +55,7 @@ public class CarOwnerMapper {
             if (transaction != null) {
                 transaction.rollback();
             }
-            LOGGER.error("Error while searching for owner!" + e.getMessage());
+            LOGGER.error("Error while searching for {}! Error: {}", carOwnerTelephoneNo, e.getMessage());
             throw e;
         }
 
@@ -81,7 +78,7 @@ public class CarOwnerMapper {
             if (transaction != null) {
                 transaction.rollback();
             }
-            LOGGER.error("Error while retrieving owner!" + e.getMessage());
+            LOGGER.error("Error while retrieving {}! Error: {}", carOwner, e.getMessage());
         }
 
         return carOwner;
@@ -105,7 +102,7 @@ public class CarOwnerMapper {
             if (transaction != null) {
                 transaction.rollback();
             }
-            LOGGER.error("Error while adding owner!" + e.getMessage());
+            LOGGER.error("Error while adding {}! Error: {}", carOwnerToAdd, e.getMessage());
             return false;
         }
     }
@@ -153,7 +150,7 @@ public class CarOwnerMapper {
             if (transaction != null) {
                 transaction.rollback();
             }
-            LOGGER.error("Error while adding owner!" + e.getMessage());
+            LOGGER.error("Error while modifying {}! Error: {}", modifiedCarOwner, e.getMessage());
             return false;
         }
     }

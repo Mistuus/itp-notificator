@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.resources.AbstractTestEnvironmentSetup;
 import org.phantom.notificator.util.MockedHibernateUtil;
+import org.phantom.notificator.util.ValidationUtil;
 
 import javax.validation.ConstraintViolation;
 import java.util.Set;
@@ -18,6 +19,7 @@ import java.util.Set;
 /**
  * Created by Master Victor on 06/07/2015.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
 
     private static SessionFactory sessionFactory = MockedHibernateUtil.getSessionFactory();
@@ -41,7 +43,7 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testNoValidationErrors() {
-        Assert.assertEquals(0, mapper.getValidationErrors(victor).size());
+        Assert.assertEquals(0, ValidationUtil.getValidator().validate(victor).size());
     }
 
     @Test
@@ -65,21 +67,21 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
     @Test
     public void testNoFirstName() {
         CarOwner noFirstName = new CarOwner(null, "Popescu", "0123456789");
-        Set<ConstraintViolation<CarOwner>> validationErrors = mapper.getValidationErrors(noFirstName);
+        Set<ConstraintViolation<CarOwner>> validationErrors = ValidationUtil.getValidator().validate(noFirstName);
         Assert.assertEquals(1, validationErrors.size());
     }
 
     @Test
     public void testNoLastName() {
         CarOwner noLastName = new CarOwner("Andrei", null, "0123456789");
-        Set<ConstraintViolation<CarOwner>> validationErrors = mapper.getValidationErrors(noLastName);
+        Set<ConstraintViolation<CarOwner>> validationErrors = ValidationUtil.getValidator().validate(noLastName);
         Assert.assertEquals(1, validationErrors.size());
     }
 
     @Test
     public void testNoPhoneNumber() {
         CarOwner noPhoneNumber = new CarOwner("Andrei", "Popescu", null);
-        Set<ConstraintViolation<CarOwner>> validationErrors = mapper.getValidationErrors(noPhoneNumber);
+        Set<ConstraintViolation<CarOwner>> validationErrors = ValidationUtil.getValidator().validate(noPhoneNumber);
         Assert.assertEquals(1, validationErrors.size());
     }
 
@@ -87,8 +89,8 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
     public void testInvalidPhoneNumber() {
         CarOwner lessThan10Digits = new CarOwner("Andrei", "Popescu", "01234567");
         CarOwner moreThan13Digits = new CarOwner("Andrei", "Popescu", "01234567898765");
-        Set<ConstraintViolation<CarOwner>> validationErrorsLessThan10 = mapper.getValidationErrors(lessThan10Digits);
-        Set<ConstraintViolation<CarOwner>> validationErrorsMoreThan10 = mapper.getValidationErrors(moreThan13Digits);
+        Set<ConstraintViolation<CarOwner>> validationErrorsLessThan10 = ValidationUtil.getValidator().validate(lessThan10Digits);
+        Set<ConstraintViolation<CarOwner>> validationErrorsMoreThan10 = ValidationUtil.getValidator().validate(moreThan13Digits);
         Assert.assertEquals(1, validationErrorsLessThan10.size());
         Assert.assertEquals(1, validationErrorsMoreThan10.size());
     }
@@ -96,7 +98,7 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
     @Test
     public void testValidEmail() {
         CarOwner validEmail = new CarOwner("V", "P", "0123456789");
-        Set<ConstraintViolation<CarOwner>> validationErrors = mapper.getValidationErrors(validEmail);
+        Set<ConstraintViolation<CarOwner>> validationErrors = ValidationUtil.getValidator().validate(validEmail);
         Assert.assertEquals(0, validationErrors.size());
     }
 
@@ -104,7 +106,7 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
     public void testInvalidEmail() {
         CarOwner invalidEmail = new CarOwner("V", "P", "0123456789");
         invalidEmail.setEmail("vpyahoo.com");
-        Set<ConstraintViolation<CarOwner>> validationErrors = mapper.getValidationErrors(invalidEmail);
+        Set<ConstraintViolation<CarOwner>> validationErrors = ValidationUtil.getValidator().validate(invalidEmail);
         Assert.assertEquals(1, validationErrors.size());
     }
 
