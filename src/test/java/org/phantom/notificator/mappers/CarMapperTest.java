@@ -16,6 +16,7 @@ import org.phantom.notificator.util.MockedHibernateUtil;
 /**
  * Created by Master Victor on 09/07/2015.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class CarMapperTest extends AbstractTestEnvironmentSetup {
 
     private static SessionFactory sessionFactory = MockedHibernateUtil.getSessionFactory();
@@ -59,7 +60,7 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
     }
 
     @Test
-    public void testCarRegistrationNumberIsNotInDb() {
+    public void testRegistrationNumberIsNotInDb() {
         String nonExistentCarRegistrationNumber = "AG 123 ABC";
         Assert.assertFalse(mapper.isRegistrationNumberInDb(nonExistentCarRegistrationNumber));
     }
@@ -172,7 +173,7 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
         Transaction transaction = null;
         try {
             transaction = currentSession.beginTransaction();
-            currentSession.persist(car);
+            currentSession.saveOrUpdate(car);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
