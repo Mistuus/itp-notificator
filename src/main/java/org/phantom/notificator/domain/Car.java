@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Created by Master Victor on 23/06/2015.
  */
+@SuppressWarnings("DefaultFileTemplate")
 @Entity
 @Table(name = "CARS")
 public class Car {
@@ -64,7 +65,7 @@ public class Car {
         return carRegistrationNumber;
     }
 
-    public void setCarRegistrationNumber(String carRegistrationNumber) {
+    private void setCarRegistrationNumber(String carRegistrationNumber) {
         this.carRegistrationNumber = carRegistrationNumber;
     }
 
