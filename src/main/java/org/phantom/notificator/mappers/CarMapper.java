@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolation;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -84,6 +86,7 @@ public class CarMapper {
         return car;
     }
 
+    //TODO: Move mapper to carOwnerMapper
     public boolean addCarToOwner(CarOwner carOwner, Car car) {
         CarOwnerMapper carOwnerMapper = new CarOwnerMapper(this.sessionFactory);
 
@@ -156,6 +159,23 @@ public class CarMapper {
             }
             LOGGER.error("Error while modifying {}! Error: {}", modifiedCar, e.getMessage());
             return false;
+        }
+    }
+    public List<Car> retrieveAllCars()
+    {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = currentSession.beginTransaction();
+            List<Car> list = currentSession.createCriteria(Car.class).list();
+            transaction.commit();
+            return list;
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            LOGGER.error("Error while retrieving all cars! Returning empty list! Error: {}", e.getMessage());
+            return Collections.emptyList();
         }
     }
 }

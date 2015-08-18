@@ -13,6 +13,8 @@ import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.resources.AbstractTestEnvironmentSetup;
 import org.phantom.notificator.util.MockedHibernateUtil;
 
+import java.util.List;
+
 /**
  * Created by Master Victor on 09/07/2015.
  */
@@ -31,6 +33,12 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
     @AfterClass
     public static void tearDownAfterClass() {
         removeCarsAndOwnersFromDbAndCloseSession(sessionFactory);
+    }
+
+    @Test
+    public void testRetrieveAllCars() {
+        List<Car> actualCars = mapper.retrieveAllCars();
+        Assert.assertEquals(expectedCars,actualCars);
     }
 
     @Test
