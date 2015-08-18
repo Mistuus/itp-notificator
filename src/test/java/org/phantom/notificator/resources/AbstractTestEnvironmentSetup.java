@@ -39,7 +39,7 @@ public abstract class AbstractTestEnvironmentSetup {
     public static Car danielsCar;
 
     public static List<CarOwner> carOwners;
-    public static List<Car> cars;
+    public static List<Car> expectedCars;
     public static LocalDate currentDateForTest;
 
     public static void setUpCarsAndOwnersWithoutPersistingToDb() {
@@ -53,7 +53,7 @@ public abstract class AbstractTestEnvironmentSetup {
         LOGGER.info("---->>>> Cars Configured!! <<<<----");
 
         // Create a mock of ItpNotificator to return a predefined date.
-        spyItpNotificator = spy(new ItpNotificator(cars, daysToNotifyInAdvance));
+        spyItpNotificator = spy(new ItpNotificator(expectedCars, daysToNotifyInAdvance));
         doReturn(currentDateForTest).when(spyItpNotificator).getCurrentDate();
         LOGGER.info("---->>>> Itp Notificator Mocked!! <<<<----");
 
@@ -77,7 +77,7 @@ public abstract class AbstractTestEnvironmentSetup {
         danielsCar = new Car("B 33 DPT", currentDateForTest.plus(Days.ONE), daniel);
         daniel.addCar(danielsCar);
 
-        cars = Arrays.asList(victorsCarWithoutUpcomingItp,
+        expectedCars = Arrays.asList(victorsCarWithoutUpcomingItp,
                 mihneasCarWithUpcomingItp,
                 mihneasOtherCarWithUpcomingItp,
                 bunusCar,

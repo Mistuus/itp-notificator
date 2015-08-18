@@ -21,7 +21,7 @@ public class Car {
     @Column(name = "CAR_REGISTRATION_NUMBER")
     @Length(min = 8, max = 10,
             message = "Car Registration Number must be between 8 and 10 characters")
-    @NotNull(message = "Telephone Number cannot be null")
+    @NotNull(message = "Car Registration Number cannot be null")
     private String carRegistrationNumber;
 
     @Column(name = "ITP_EXPIRY_DATE")
