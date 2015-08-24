@@ -8,8 +8,9 @@ import javax.swing.*;
 public class GUI {
     public static void main(String[] args)
     {
-        JFrame frame = new JFrame();
-        JPanel panel=new JPanel();
+
+        JFrame frame = new JFrame("Main menu");
+        /*JPanel panel=new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         frame.setSize(400, 400);
         frame.setTitle("ITP Notificator");
@@ -23,5 +24,8 @@ public class GUI {
         panel.add(b3);
         frame.add(panel);
         frame.setVisible(true);
+        */
+        frame.setVisible(true);
+
     }
 }

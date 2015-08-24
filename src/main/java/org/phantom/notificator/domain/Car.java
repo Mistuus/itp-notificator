@@ -29,7 +29,7 @@ public class Car {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate itpExpiryDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade =
+    @ManyToOne(fetch = FetchType.EAGER, cascade =
             {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @NotNull(message = "Car must have an owner")
@@ -41,7 +41,7 @@ public class Car {
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate, CarOwner carOwner) {
         this.carRegistrationNumber = carRegistrationNumber;
         this.itpExpiryDate = itpExpiryDate;
-        this.carOwner = carOwner;
+        carOwner.addCar(this);
     }
 
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate) {
@@ -64,7 +64,10 @@ public class Car {
     public String getCarRegistrationNumber() {
         return carRegistrationNumber;
     }
-
+    public Object[] setDetailsVector()
+    {
+        return new Object[]{this.getCarRegistrationNumber(),this.getItpExpiryDate(),this.getCarOwner().getLastName()+" "+this.getCarOwner().getFirstName()};
+    }
     private void setCarRegistrationNumber(String carRegistrationNumber) {
         this.carRegistrationNumber = carRegistrationNumber;
     }

@@ -8,25 +8,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by mihne_000 on 6/30/2015.
+ * Created by mihne_000 on 7/6/2015.
  */
-public class AddCar extends JFrame{
-    private JPanel panel1;
-    private JCheckBox existingClientCheckBox;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
-    private JButton addCarButton;
+public class SelectCars extends JFrame {
     private JButton backButton;
+    private JTable table1;
     private JButton nextButton;
+    private JButton backToSeeCarsButton;
+    private JPanel panel1;
     private CarOwnerMapper carOwnerMapper;
     private CarMapper carMapper;
-    public AddCar(){
-        super("Add Cars");
+    public SelectCars() {
+        super("Select Cars");
+        this.carMapper=carMapper;
+        this.carOwnerMapper=carOwnerMapper;
         add(panel1);
         pack();
         setVisible(true);
@@ -38,10 +33,17 @@ public class AddCar extends JFrame{
                 setVisible(false);
             }
         });
+        backToSeeCarsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ViewCars(carMapper,carOwnerMapper);
+                setVisible(false);
+            }
+        });
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ConfirmDetails(carMapper,carOwnerMapper);
+                new ModifyCar();
                 setVisible(false);
             }
         });

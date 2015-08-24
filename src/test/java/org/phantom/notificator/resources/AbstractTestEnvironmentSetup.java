@@ -7,7 +7,7 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
-import org.phantom.notificator.schedulers.ItpNotificator;
+import org.phantom.notificator.schedulers.DailyScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public abstract class AbstractTestEnvironmentSetup {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTestEnvironmentSetup.class);
 
-    public static ItpNotificator spyItpNotificator;
+    public static DailyScheduler spyDailyScheduler;
     public static Days daysToNotifyInAdvance;
 
     public static CarOwner victor;
@@ -52,9 +52,9 @@ public abstract class AbstractTestEnvironmentSetup {
         setUpCars(currentDateForTest);
         LOGGER.info("---->>>> Cars Configured!! <<<<----");
 
-        // Create a mock of ItpNotificator to return a predefined date.
-        spyItpNotificator = spy(new ItpNotificator(expectedCars, daysToNotifyInAdvance));
-        doReturn(currentDateForTest).when(spyItpNotificator).getCurrentDate();
+        // Create a mock of DailyScheduler to return a predefined date.
+        spyDailyScheduler = spy(new DailyScheduler(expectedCars, daysToNotifyInAdvance));
+        doReturn(currentDateForTest).when(spyDailyScheduler).getCurrentDate();
         LOGGER.info("---->>>> Itp Notificator Mocked!! <<<<----");
 
         LOGGER.info("---->>>> FINISHED SETTING UP TEST ENVIRONMENT (No DB Setup)<<<<----");
@@ -93,6 +93,7 @@ public abstract class AbstractTestEnvironmentSetup {
         carOwners = Arrays.asList(victor, mihnea, daniel, bunu);
     }
 
+    // todo: should we first delete and then add the objects????
     protected static void setUpCarsAndOwnersInDbAndOpenSession(SessionFactory sessionFactory) {
         LOGGER.info(" ---->>>> DB SETUP: Persisting Cars and Owners to DB <<<<----");
 

@@ -32,6 +32,7 @@ public class MockedHibernateUtil {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
             Configuration configuration = new Configuration();
+            System.out.println(URL_PREFIX + getDbFilePath() + URL_SUFFIX);
             configuration.getProperties().setProperty("hibernate.connection.url", URL_PREFIX + getDbFilePath() + URL_SUFFIX);
             configuration.configure();
 
