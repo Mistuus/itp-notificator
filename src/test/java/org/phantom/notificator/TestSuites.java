@@ -7,6 +7,7 @@ import org.phantom.notificator.mappers.CarOwnerMapperTest;
 import org.phantom.notificator.schedulers.DailySchedulerTest;
 import org.phantom.notificator.services.EmailSenderTest;
 import org.phantom.notificator.util.HibernateUtilTest;
+import org.phantom.notificator.util.PropertiesRetrievalUtilTest;
 
 /**
  * Created by Victor on 26/08/2015 15:21.
@@ -17,7 +18,8 @@ import org.phantom.notificator.util.HibernateUtilTest;
         CarOwnerMapperTest.class,
         DailySchedulerTest.class,
         EmailSenderTest.class,
-        HibernateUtilTest.class
+        HibernateUtilTest.class,
+        PropertiesRetrievalUtilTest.class
         })
 public class TestSuites {
     // TODO: make sure all tests are added to the above suite

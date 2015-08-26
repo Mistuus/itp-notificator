@@ -1,6 +1,5 @@
 package org.phantom.notificator.resources;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -36,7 +35,7 @@ public abstract class AbstractTestEnvironmentSetup {
     public static Car victorsCarWithoutUpcomingItp;
     public static Car mihneasCarWithUpcomingItp;
     public static Car mihneasOtherCarWithUpcomingItp;
-    public static Car bunusCar;
+    public static Car bunusCarWithUpcomingItp;
     public static Car danielsCar;
 
     public static List<CarOwner> carOwners;
@@ -68,7 +67,7 @@ public abstract class AbstractTestEnvironmentSetup {
         // Set up cars with upcoming Itp Expiry Date in EXACTLY daysUntilItpExpires
         mihneasCarWithUpcomingItp = new Car("B 23 BUB", currentDateForTest.plus(daysToNotifyInAdvance), mihnea);
         mihneasOtherCarWithUpcomingItp = new Car("B 45 MIC", currentDateForTest.plus(daysToNotifyInAdvance), mihnea);
-        bunusCar = new Car("AG 88 VEE", currentDateForTest.plus(daysToNotifyInAdvance), bunu);
+        bunusCarWithUpcomingItp = new Car("AG 88 VEE", currentDateForTest.plus(daysToNotifyInAdvance), bunu);
 
         // Set up cars with upcoming Itp Expiry Date in LESS than daysUntilItpExpires
         danielsCar = new Car("B 33 DPT", currentDateForTest.plus(Days.ONE), daniel);
@@ -76,7 +75,7 @@ public abstract class AbstractTestEnvironmentSetup {
         expectedCars = Arrays.asList(victorsCarWithoutUpcomingItp,
                 mihneasCarWithUpcomingItp,
                 mihneasOtherCarWithUpcomingItp,
-                bunusCar,
+                bunusCarWithUpcomingItp,
                 danielsCar);
     }
 
