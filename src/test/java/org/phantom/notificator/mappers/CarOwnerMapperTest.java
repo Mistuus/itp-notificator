@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.resources.AbstractTestEnvironmentSetup;
-import org.phantom.notificator.util.MockedHibernateUtil;
+import org.phantom.notificator.resources.MockedHibernateUtil;
 import org.phantom.notificator.util.ValidationUtil;
 
 import javax.validation.ConstraintViolation;

@@ -1,9 +1,10 @@
-package org.phantom.notificator.util;
+package org.phantom.notificator.resources;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.phantom.notificator.util.HibernateUtil;
 
 import java.net.URL;
 
@@ -53,6 +54,7 @@ public class MockedHibernateUtil {
 
         if (resource != null) {
             absolutePath = resource.getPath();
+            System.out.println("---> Path is " + absolutePath);
             // remove the first character, '\' and the suffix '.mv.db'
             return absolutePath.substring(1, absolutePath.indexOf(".mv.db"));
         } else {

@@ -2,9 +2,7 @@ package org.phantom.notificator.schedulers;
 
 import org.hibernate.SessionFactory;
 import org.phantom.notificator.resources.AbstractTestEnvironmentSetup;
-import org.phantom.notificator.util.MockedHibernateUtil;
-
-import static org.junit.Assert.*;
+import org.phantom.notificator.resources.MockedHibernateUtil;
 
 /**
  * Created by mihne on 8/19/2015.
