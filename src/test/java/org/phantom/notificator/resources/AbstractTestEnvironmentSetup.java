@@ -1,5 +1,6 @@
 package org.phantom.notificator.resources;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -122,12 +123,10 @@ public abstract class AbstractTestEnvironmentSetup {
         Transaction txt = null;
         try {
             txt = session.beginTransaction();
-            for (CarOwner carOwner : carOwners) {
-                Object persistedCarOwner = session.get(CarOwner.class, carOwner.getTelephoneNumber());
-                if (persistedCarOwner != null) {
-                    session.delete(persistedCarOwner);
-                }
-            }
+            String deleteAllCarsDataString = "delete from Car";
+            String deleteAllCarOwnersDataString = "delete from CarOwner";
+            session.createQuery(deleteAllCarsDataString).executeUpdate();
+            session.createQuery(deleteAllCarOwnersDataString).executeUpdate();
             txt.commit();
             LOGGER.info("---->>>> All cars and owners removed from DB! <<<<----");
         } catch (Exception e) {
