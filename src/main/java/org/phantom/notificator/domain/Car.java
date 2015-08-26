@@ -45,7 +45,8 @@ public class Car {
     }
 
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate) {
-        this(carRegistrationNumber, itpExpiryDate, null);
+        this.carRegistrationNumber = carRegistrationNumber;
+        this.itpExpiryDate = itpExpiryDate;
     }
 
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate, String firstName, String lastName, String telephoneNo) {

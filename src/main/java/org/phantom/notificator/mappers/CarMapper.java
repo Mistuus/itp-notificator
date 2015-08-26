@@ -86,34 +86,6 @@ public class CarMapper {
         return car;
     }
 
-    //TODO: Move mapper to carOwnerMapper
-    public boolean addCarToOwner(CarOwner carOwner, Car car) {
-        CarOwnerMapper carOwnerMapper = new CarOwnerMapper(this.sessionFactory);
-
-        // Case 1: Car already in DB for different Owner => Do nothing. Must delete existing car first and then add to new owner
-        if (isCarInDb(car)) {
-            return false;
-        }
-
-        // Case 2: No Owner & No Car in DB => add both
-        // Case 3: Owner exists & No Car in DB => add car to owner
-        carOwner.addCar(car);
-        Session currentSession = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
-        try {
-            transaction = currentSession.beginTransaction();
-            currentSession.saveOrUpdate(carOwner);
-            transaction.commit();
-            return true;
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            LOGGER.error("Error while adding {} to {}! {}", car, carOwner, e.getMessage());
-            return false;
-        }
-    }
-
     public boolean removeCar(Car car) {
         if (!isCarInDb(car)) {
             return false;

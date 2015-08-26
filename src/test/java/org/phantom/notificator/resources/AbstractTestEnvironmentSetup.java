@@ -63,19 +63,14 @@ public abstract class AbstractTestEnvironmentSetup {
     private static void setUpCars(LocalDate currentDateForTest) {
         // Set up cars with upcoming Itp Expiry Date in MORE than daysUntilItpExpires
         victorsCarWithoutUpcomingItp = new Car("B 725 MIH", currentDateForTest.plus(daysToNotifyInAdvance).plus(Days.THREE), victor);
-        victor.addCar(victorsCarWithoutUpcomingItp);
 
         // Set up cars with upcoming Itp Expiry Date in EXACTLY daysUntilItpExpires
         mihneasCarWithUpcomingItp = new Car("B 23 BUB", currentDateForTest.plus(daysToNotifyInAdvance), mihnea);
         mihneasOtherCarWithUpcomingItp = new Car("B 45 MIC", currentDateForTest.plus(daysToNotifyInAdvance), mihnea);
-        mihnea.addCar(mihneasCarWithUpcomingItp);
-        mihnea.addCar(mihneasOtherCarWithUpcomingItp);
         bunusCar = new Car("AG 88 VEE", currentDateForTest.plus(daysToNotifyInAdvance), bunu);
-        bunu.addCar(bunusCar);
 
         // Set up cars with upcoming Itp Expiry Date in LESS than daysUntilItpExpires
         danielsCar = new Car("B 33 DPT", currentDateForTest.plus(Days.ONE), daniel);
-        daniel.addCar(danielsCar);
 
         expectedCars = Arrays.asList(victorsCarWithoutUpcomingItp,
                 mihneasCarWithUpcomingItp,
@@ -109,7 +104,7 @@ public abstract class AbstractTestEnvironmentSetup {
 
         } catch (Exception e) {
 
-            LOGGER.error("---->>>> Error occurred when adding clients !! Rolling back. <<<<----");
+            LOGGER.error("---->>>> Error occurred when adding clients !! Rolling back. {}<<<<----" );
             e.printStackTrace();
             if (txt != null) {
                 txt.rollback();

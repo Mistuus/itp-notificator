@@ -4,6 +4,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.util.ValidationUtil;
 import org.slf4j.Logger;
@@ -151,6 +152,33 @@ public class CarOwnerMapper {
                 transaction.rollback();
             }
             LOGGER.error("Error while modifying {}! Error: {}", modifiedCarOwner, e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean addCarToOwner(CarOwner carOwner, Car car) {
+        CarMapper carMapper = new CarMapper(this.sessionFactory);
+
+        // Case 1: Car already in DB for different Owner => Do nothing. Must delete existing car first and then add to new owner
+        if (carMapper.isCarInDb(car)) {
+            return false;
+        }
+
+        // Case 2: No Owner & No Car in DB => add both
+        // Case 3: Owner exists & No Car in DB => add car to owner
+        carOwner.addCar(car);
+        Session currentSession = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = currentSession.beginTransaction();
+            currentSession.saveOrUpdate(carOwner);
+            transaction.commit();
+            return true;
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            LOGGER.error("Error while adding {} to {}! {}", car, carOwner, e.getMessage());
             return false;
         }
     }
