@@ -13,8 +13,7 @@ import javax.swing.plaf.synth.SynthButtonUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,54 +26,82 @@ public class ViewCars extends JFrame{
     private JButton modifyButton;
     private JPanel panel1;
     private JLabel jlabel;
+    private JButton backToMainMenuButton;
+    private JButton removeButton;
     private CarOwnerMapper carOwnerMapper;
     private CarMapper carMapper;
+    private Car selectedCar;
+    private CarOwner prop;
     public ViewCars(CarMapper carMapper,CarOwnerMapper carOwnerMapper){
         super("View Cars");
         this.carMapper=carMapper;
         this.carOwnerMapper=carOwnerMapper;
         add(panel1);
+        setLocationRelativeTo(null);
         pack();
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AddCar();
+                new AddCar(carMapper, carOwnerMapper);
                 setVisible(false);
+            }
+        });
+        // TODO: selection prototype
+        table1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+//                selectedCar = carMapper.retrieveCar(table1.getValueAt(table1.getSelectedRow(), 1).toString());
+//                prop = selectedCar.getCarOwner();
+
+            }
+        });
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedCar = carMapper.retrieveCar(table1.getValueAt(table1.getSelectedRow(), 1).toString());
+                prop = selectedCar.getCarOwner();
+                carMapper.removeCar(selectedCar);
+                setVisible(false);
+                new ViewCars(carMapper,carOwnerMapper);
+                new PopUpRemove(carMapper,carOwnerMapper);
+
             }
         });
         modifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ModifyCar();
+                selectedCar = carMapper.retrieveCar(table1.getValueAt(table1.getSelectedRow(), 1).toString());
+                prop = selectedCar.getCarOwner();
+                new ConfirmDetails(carMapper, carOwnerMapper, prop, selectedCar);
                 setVisible(false);
             }
         });
-        table1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent event) {
-                // do some actions here, for example
-                // System.out.println(carMapper.retrieveCar(table1.getValueAt(table1.getSelectedRow(), 0).toString()).getCarOwner().getTelephoneNumber());
-                // print first column value from selected row
-                // System.out.println(table1.getValueAt(table1.getSelectedRow(), 0).toString());
+        /*modifyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ModifyCar(carMapper, carOwnerMapper);
+                setVisible(false);
+            }
+        });*/
+        backToMainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MainMenu2(carMapper,carOwnerMapper);
+                setVisible(false);
             }
         });
     }
-
     private void createUIComponents() {
         // TODO: place custom component creation code here
-       /* for(Iterator iterator=carMapper.retrieveAllCars().iterator();iterator.hasNext();)
-        {
-            Car car=(Car) iterator.next();
-            System.out.println(car.toString());
-        }*/
-//        System.out.println(carMapper.retrieveAllCars().size());
         panel1=new JPanel();
         panel1.setPreferredSize(new Dimension(500,500));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = screenSize.height;
+        int width = screenSize.width;
+        setSize(width / 2, height / 2);
         Object rowData[][]=new Object[0][3];
-        Object columnNames[]={"Car Reg. No.","Date","Owner"};
-        //  CarOwner mihCarOwner = new CarOwner("Mihnea", "Patentasu", "077777777");
-        //Car mihsCar = new Car( "B 725 MIH", new LocalDate(2014, 10, 5),mihCarOwner);
+        Object columnNames[]={"Owner","Car Reg. No.","Tel. No.","Date"};
         table1=new JTable(new DefaultTableModel (rowData,columnNames) {
             public boolean isCellEditable(int rowIndex, int columnIndex)
             {
@@ -83,15 +110,10 @@ public class ViewCars extends JFrame{
         });
         table1.setPreferredSize(new Dimension(1000, 1000));
         DefaultTableModel model=(DefaultTableModel) table1.getModel();
-        model.addRow(columnNames);
-       for(Car car :carMapper.retrieveAllCars())
+        for(Car car :carMapper.retrieveAllCars())
         {
             model.addRow(car.setDetailsVector());
         }
-
-        //model.addRow(mihsCar.setDetailsVector());
-
-                //System.out.println(carMapper.retrieveAllCars().get(0).toString());
     }
 }
 

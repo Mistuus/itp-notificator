@@ -2,7 +2,6 @@ package org.phantom.notificator.gui;
 
 import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.mappers.CarOwnerMapper;
-import sun.applet.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,16 +9,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by mihne_000 on 6/29/2015.
+ * Created by mihne on 8/26/2015.
  */
-public class MainMenu extends JFrame{
-    private JButton addCarButton;
+public class MainMenu2 extends JFrame {
+    private JButton modifyButton;
+    private JButton viewCarsButton1;
+    private JButton addButton;
     private JPanel panel1;
-    private JButton viewCarsButton;
-    private JButton modifyCarButton;
-    private CarOwnerMapper carOwnerMapper;
     private CarMapper carMapper;
-    public MainMenu( CarMapper carMapper, CarOwnerMapper carOwnerMapper)  {
+    private CarOwnerMapper carOwnerMapper;
+    public MainMenu2 ( CarMapper carMapper, CarOwnerMapper carOwnerMapper)  {
         super("Main Menu");
         this.carMapper=carMapper;
         this.carOwnerMapper=carOwnerMapper;
@@ -28,22 +27,21 @@ public class MainMenu extends JFrame{
         pack();
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        viewCarsButton.addActionListener(new ActionListener() {
+        viewCarsButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new ViewCars(carMapper,carOwnerMapper);
                 setVisible(false);
-
             }
         });
-        addCarButton.addActionListener(new ActionListener() {
+        addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new AddCar(carMapper,carOwnerMapper);
                 setVisible(false);
             }
         });
-        modifyCarButton.addActionListener(new ActionListener() {
+        modifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new SelectCars(carMapper,carOwnerMapper);
@@ -53,12 +51,17 @@ public class MainMenu extends JFrame{
     }
     private void createUIComponents() {
         // TODO: place custom component creation code here
+        addButton=new JButton();
+        viewCarsButton1=new JButton();
+        modifyButton=new JButton();
+        addButton.setPreferredSize(new Dimension(10,10));
+        viewCarsButton1.setPreferredSize(new Dimension(10, 10));
+        modifyButton.setPreferredSize(new Dimension(10, 10));
         panel1=new JPanel();
-        panel1.setPreferredSize(new Dimension(500, 250));
+        panel1.setPreferredSize(new Dimension(500, 500));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int height = screenSize.height;
         int width = screenSize.width;
-        setSize(width/2, height/2);
-
+        setSize(width / 2, height / 2);
     }
 }

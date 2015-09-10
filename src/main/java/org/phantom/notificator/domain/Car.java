@@ -66,7 +66,7 @@ public class Car {
     }
     public Object[] setDetailsVector()
     {
-        return new Object[]{this.getCarRegistrationNumber(),this.getItpExpiryDate(),this.getCarOwner().getLastName()+" "+this.getCarOwner().getFirstName()};
+        return new Object[]{this.getCarOwner().getLastName()+" "+this.getCarOwner().getFirstName(),this.getCarRegistrationNumber(),this.getCarOwner().getTelephoneNumber(),this.getItpExpiryDate()};
     }
     private void setCarRegistrationNumber(String carRegistrationNumber) {
         this.carRegistrationNumber = carRegistrationNumber;

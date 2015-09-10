@@ -3,6 +3,7 @@ package org.phantom.notificator.schedulers;
 import org.hibernate.SessionFactory;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.gui.MainMenu;
+import org.phantom.notificator.gui.MainMenu2;
 import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.mappers.CarOwnerMapper;
 import org.phantom.notificator.util.HibernateUtil;
@@ -18,7 +19,7 @@ public class ItpNotificator {
         CarOwnerMapper carOwnerMapper = new CarOwnerMapper(sessionFactory);
 
         // Initialise the GUI
-        new MainMenu(carMapper, carOwnerMapper);
+        new MainMenu2(carMapper, carOwnerMapper);
 
     }
 
