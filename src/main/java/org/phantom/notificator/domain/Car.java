@@ -39,14 +39,9 @@ public class Car {
     }
 
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate, CarOwner carOwner) {
-        this.carRegistrationNumber = carRegistrationNumber;
+        this.carRegistrationNumber = carRegistrationNumber.toUpperCase();
         this.itpExpiryDate = itpExpiryDate;
         carOwner.addCar(this);
-    }
-
-    public Car(String carRegistrationNumber, LocalDate itpExpiryDate) {
-        this.carRegistrationNumber = carRegistrationNumber;
-        this.itpExpiryDate = itpExpiryDate;
     }
 
     public Car(String carRegistrationNumber, LocalDate itpExpiryDate, String firstName, String lastName, String telephoneNo) {

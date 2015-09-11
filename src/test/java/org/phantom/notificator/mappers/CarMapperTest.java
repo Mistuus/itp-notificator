@@ -50,18 +50,16 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testIsInvalidCar() {
-        CarOwner invalidCarOwner = new CarOwner("Test", "User", "0741234567");
-        Car nullRegistrationNumber = new Car(null, currentDateForTest, invalidCarOwner);
-        Car lessThan8Characters = new Car("abc", currentDateForTest, invalidCarOwner);
-        Car moreThan10Characters = new Car("abc 123 abc", currentDateForTest, invalidCarOwner);
-        Car noItpExpiryDate = new Car("AG 07 ABC", null, invalidCarOwner);
-        Car noOwner = new Car("AG 07 ABC", currentDateForTest);
+        CarOwner testCarOwner = new CarOwner("Test", "User", "0741234567");
+        Car nullRegistrationNumber = new Car(null, currentDateForTest, testCarOwner);
+        Car lessThan8Characters = new Car("abc", currentDateForTest, testCarOwner);
+        Car moreThan10Characters = new Car("abc 123 abc", currentDateForTest, testCarOwner);
+        Car noItpExpiryDate = new Car("AG 07 ABC", null, testCarOwner);
 
         Assert.assertFalse(mapper.isValidCar(nullRegistrationNumber).isEmpty());
         Assert.assertFalse(mapper.isValidCar(lessThan8Characters).isEmpty());
         Assert.assertFalse(mapper.isValidCar(moreThan10Characters).isEmpty());
         Assert.assertFalse(mapper.isValidCar(noItpExpiryDate).isEmpty());
-        Assert.assertFalse(mapper.isValidCar(noOwner).isEmpty());
     }
 
     @Test
@@ -110,7 +108,7 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testDoNotRemoveNonExistentCar() throws Exception {
-        Car nonExistentCar = new Car("AG 07 ABC", currentDateForTest);
+        Car nonExistentCar = new Car("AG 07 ABC", currentDateForTest, bunu);
         Assert.assertFalse(mapper.removeCar(nonExistentCar));
     }
 
@@ -145,7 +143,7 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testDoNotChangeDetailsForNonExistentCar() {
-        Car nonExistentCar = new Car("AG 07 ABC", currentDateForTest);
+        Car nonExistentCar = new Car("AG 07 ABC", currentDateForTest, bunu);
         Assert.assertFalse(mapper.changeCarDetails(nonExistentCar));
     }
 
