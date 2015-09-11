@@ -1,118 +1,134 @@
 package org.phantom.notificator.gui;
 
-import org.joda.time.LocalDate;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.mappers.CarOwnerMapper;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.synth.SynthButtonUI;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by mihne_000 on 6/30/2015.
  */
-public class ViewCars extends JFrame{
-    private JTable table1;
+public class ViewCars extends JFrame {
+
+    public static final Dimension PREFERRED_DIMENSION = new Dimension(500, 500);
+    public static final String EMPTY_STRING = "";
+    private JTable carsTable;
     private JButton addButton;
     private JButton modifyButton;
-    private JPanel panel1;
-    private JLabel jlabel;
+    private JPanel panel;
+    private JLabel windowTitle;
     private JButton backToMainMenuButton;
     private JButton removeButton;
-    private CarOwnerMapper carOwnerMapper;
-    private CarMapper carMapper;
+    private final CarOwnerMapper carOwnerMapper;
+    private final CarMapper carMapper;
     private Car selectedCar;
-    private CarOwner prop;
-    public ViewCars(CarMapper carMapper,CarOwnerMapper carOwnerMapper){
+    private CarOwner carOwner;
+
+    public ViewCars(CarMapper carMapper, CarOwnerMapper carOwnerMapper) {
         super("View Cars");
-        this.carMapper=carMapper;
-        this.carOwnerMapper=carOwnerMapper;
-        add(panel1);
-        setLocationRelativeTo(null);
+        this.carMapper = carMapper;
+        this.carOwnerMapper = carOwnerMapper;
+        add(panel);
+        setUpButtonListeners();
+        setPreferredSize(PREFERRED_DIMENSION);
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new AddCar(carMapper, carOwnerMapper);
-                setVisible(false);
-            }
-        });
-        // TODO: selection prototype
-        table1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent event) {
-//                selectedCar = carMapper.retrieveCar(table1.getValueAt(table1.getSelectedRow(), 1).toString());
-//                prop = selectedCar.getCarOwner();
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
 
-            }
+    private void setUpButtonListeners() {
+        addButton.addActionListener(e -> {
+            new AddCar(carMapper, carOwnerMapper);
+            setVisible(false);
         });
-        removeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                selectedCar = carMapper.retrieveCar(table1.getValueAt(table1.getSelectedRow(), 1).toString());
-                prop = selectedCar.getCarOwner();
-                carMapper.removeCar(selectedCar);
-                setVisible(false);
-                new ViewCars(carMapper,carOwnerMapper);
-                new PopUpRemove(carMapper,carOwnerMapper);
 
+        removeButton.addActionListener(e -> {
+            String carRegistrationNumber = getSelectedCarRegistrationNumber();
+            boolean isCarDeleted = carMapper.removeCar(carRegistrationNumber);
+            if (isCarDeleted) {
+                JOptionPane.showMessageDialog(panel,
+                        "Masina cu numarul " + carRegistrationNumber + " a fost stearsa din sistem!",
+                        "Stergere indeplinita!",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(panel, "Masina nu a fost stearsa din sistem!" +
+                        "\nAti selectat masina pana sa apasati butonul Sterge?" +
+                        "\n(Verifica log-urile pentru mai multe detalii.)", "Stergere incompleta!!",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            refreshCarsTable();
+        });
+
+        modifyButton.addActionListener(e -> {
+            String carRegistrationNumber = getSelectedCarRegistrationNumber();
+            if (carRegistrationNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(panel,
+                        "Va rugam selectati o masina si apoi apasati butonul Modifica!",
+                        "Nicio masina selectata!",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                selectedCar = carMapper.retrieveCar(carRegistrationNumber);
+                carOwner = selectedCar.getCarOwner();
+                // TODO: pass to ConfirmDetails only the selected car (from it, we can get the owner)
+                new ConfirmDetails(carMapper, carOwnerMapper, carOwner, selectedCar);
+                setVisible(false);
             }
         });
-        modifyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                selectedCar = carMapper.retrieveCar(table1.getValueAt(table1.getSelectedRow(), 1).toString());
-                prop = selectedCar.getCarOwner();
-                new ConfirmDetails(carMapper, carOwnerMapper, prop, selectedCar);
-                setVisible(false);
-            }
-        });
-        /*modifyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ModifyCar(carMapper, carOwnerMapper);
-                setVisible(false);
-            }
-        });*/
-        backToMainMenuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new MainMenu2(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
+
+        backToMainMenuButton.addActionListener(e -> {
+            new MainMenu2(carMapper, carOwnerMapper);
+            setVisible(false);
         });
     }
+
+    private String getSelectedCarRegistrationNumber() {
+        int selectedRow = carsTable.getSelectedRow();
+        int carRegistrationNumberColumn = 1;
+        if (selectedRow < 0) {
+            return EMPTY_STRING;
+        } else {
+            return (String) carsTable.getValueAt(selectedRow, carRegistrationNumberColumn);
+        }
+    }
+
     private void createUIComponents() {
-        // TODO: place custom component creation code here
-        panel1=new JPanel();
-        panel1.setPreferredSize(new Dimension(500,500));
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = screenSize.height;
-        int width = screenSize.width;
-        setSize(width / 2, height / 2);
-        Object rowData[][]=new Object[0][3];
-        Object columnNames[]={"Owner","Car Reg. No.","Tel. No.","Date"};
-        table1=new JTable(new DefaultTableModel (rowData,columnNames) {
-            public boolean isCellEditable(int rowIndex, int columnIndex)
-            {
-                return false;
-            }
-        });
-        table1.setPreferredSize(new Dimension(1000, 1000));
-        DefaultTableModel model=(DefaultTableModel) table1.getModel();
-        for(Car car :carMapper.retrieveAllCars())
-        {
+        // Configure the panel to display the cars table
+        panel = new JPanel();
+
+        // Create the JTable to display the cars
+        Object rowData[][] = new Object[0][3];
+        Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Data exp. ITP"};
+        this.carsTable = new JTable(new NonEditableTableModel(rowData, columnNames));
+
+        // Populate the cars table
+        refreshCarsTable();
+    }
+
+    private void refreshCarsTable() {
+        NonEditableTableModel model = (NonEditableTableModel) this.carsTable.getModel();
+        // Empty the Table Model of cars
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+        // Reload the cars in the table
+        for (Car car : carMapper.retrieveAllCars()) {
             model.addRow(car.setDetailsVector());
+        }
+    }
+
+    private class NonEditableTableModel extends DefaultTableModel {
+        public NonEditableTableModel(Object[][] rowData, Object[] columnNames) {
+            super(rowData, columnNames);
+        }
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
         }
     }
 }
