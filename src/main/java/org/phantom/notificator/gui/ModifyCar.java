@@ -1,14 +1,10 @@
 package org.phantom.notificator.gui;
 
-import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.mappers.CarOwnerMapper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Vector;
 
 /**
  * Created by mihne_000 on 7/6/2015.
@@ -31,20 +27,14 @@ public class ModifyCar extends JFrame {
         add(panel1);
         pack();
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new SelectCars(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        backButton.addActionListener(e -> {
+            new SelectCars(carMapper, carOwnerMapper);
+            setVisible(false);
         });
-        backToMainMenuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new MainMenu(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
+        backToMainMenuButton.addActionListener(e -> {
+            new MainMenu(carMapper, carOwnerMapper);
+            setVisible(false);
         });
         /*nextButton.addActionListener(new ActionListener() {
             @Override

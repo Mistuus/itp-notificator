@@ -8,7 +8,6 @@ import org.phantom.notificator.mappers.CarOwnerMapper;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
 
 /**
  * Created by mihne_000 on 6/30/2015.
@@ -82,7 +81,7 @@ public class ViewCars extends JFrame {
         });
 
         backToMainMenuButton.addActionListener(e -> {
-            new MainMenu2(carMapper, carOwnerMapper);
+            new MainMenu(carMapper, carOwnerMapper);
             setVisible(false);
         });
     }
