@@ -19,6 +19,7 @@ import java.util.Set;
  * Created by Master Victor on 06/07/2015.
  */
 @SuppressWarnings("DefaultFileTemplate")
+// TODO: Minimize the number of DB lookups we do when removing/adding cars/Owners
 public class CarMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarMapper.class);
@@ -28,9 +29,8 @@ public class CarMapper {
         this.sessionFactory = sessionFactory;
     }
 
-    public boolean isValidCar(Car carToValidate) {
-        Set<ConstraintViolation<Car>> validationErrorsSet = ValidationUtil.getValidator().validate(carToValidate);
-        return validationErrorsSet.isEmpty();
+    public  Set<ConstraintViolation<Car>> isValidCar(Car carToValidate) {
+        return ValidationUtil.getValidator().validate(carToValidate);
     }
 
     public boolean isRegistrationNumberInDb(String carRegistrationNo) {
@@ -60,7 +60,7 @@ public class CarMapper {
     }
 
     public boolean isCarInDb(Car car) {
-        return isValidCar(car) && isRegistrationNumberInDb(car.getCarRegistrationNumber());
+        return isValidCar(car).isEmpty() && isRegistrationNumberInDb(car.getCarRegistrationNumber());
     }
 
     public Car retrieveCar(String carRegistrationNo) {

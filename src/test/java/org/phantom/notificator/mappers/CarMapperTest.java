@@ -45,7 +45,7 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testIsValidCar() throws Exception {
-        Assert.assertTrue(mapper.isValidCar(danielsCar));
+        Assert.assertTrue(mapper.isValidCar(danielsCar).isEmpty());
     }
 
     @Test
@@ -57,11 +57,11 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
         Car noItpExpiryDate = new Car("AG 07 ABC", null, invalidCarOwner);
         Car noOwner = new Car("AG 07 ABC", currentDateForTest);
 
-        Assert.assertFalse(mapper.isValidCar(nullRegistrationNumber));
-        Assert.assertFalse(mapper.isValidCar(lessThan8Characters));
-        Assert.assertFalse(mapper.isValidCar(moreThan10Characters));
-        Assert.assertFalse(mapper.isValidCar(noItpExpiryDate));
-        Assert.assertFalse(mapper.isValidCar(noOwner));
+        Assert.assertFalse(mapper.isValidCar(nullRegistrationNumber).isEmpty());
+        Assert.assertFalse(mapper.isValidCar(lessThan8Characters).isEmpty());
+        Assert.assertFalse(mapper.isValidCar(moreThan10Characters).isEmpty());
+        Assert.assertFalse(mapper.isValidCar(noItpExpiryDate).isEmpty());
+        Assert.assertFalse(mapper.isValidCar(noOwner).isEmpty());
     }
 
     @Test
