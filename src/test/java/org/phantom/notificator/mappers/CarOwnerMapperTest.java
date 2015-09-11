@@ -8,9 +8,10 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.resources.AbstractTestEnvironmentSetup;
-import org.phantom.notificator.util.MockedHibernateUtil;
+import org.phantom.notificator.resources.MockedHibernateUtil;
 import org.phantom.notificator.util.ValidationUtil;
 
 import javax.validation.ConstraintViolation;
@@ -219,6 +220,18 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
         Assert.assertFalse(mapper.changeDetails(newCarOwner));
     }
 
+    @Test
+    public void testAddCarToOwner() throws Exception {
+        Car carToAdd = new Car("AG 07 ABC", currentDateForTest);
+        Assert.assertTrue(mapper.addCarToOwner(daniel, carToAdd));
+        removeCar(carToAdd);
+    }
+
+    @Test
+    public void testDoNotAddExistingCarToOwner() {
+        Assert.assertFalse(mapper.addCarToOwner(daniel, danielsCar));
+    }
+
     private void deleteCarOwner(CarOwner newCarOwner) {
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
@@ -266,7 +279,22 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
         }
     }
 
-    private void removeCar(CarOwner carOwner) {
+    private void removeCar(Car carToDelete) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = currentSession.beginTransaction();
+            currentSession.delete(carToDelete);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
+        }
+    }
+
+    private void removeCarOwner(CarOwner carOwner) {
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {

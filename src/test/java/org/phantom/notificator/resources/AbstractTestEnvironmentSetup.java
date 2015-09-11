@@ -35,7 +35,7 @@ public abstract class AbstractTestEnvironmentSetup {
     public static Car victorsCarWithoutUpcomingItp;
     public static Car mihneasCarWithUpcomingItp;
     public static Car mihneasOtherCarWithUpcomingItp;
-    public static Car bunusCar;
+    public static Car bunusCarWithUpcomingItp;
     public static Car danielsCar;
 
     public static List<CarOwner> carOwners;
@@ -63,24 +63,19 @@ public abstract class AbstractTestEnvironmentSetup {
     private static void setUpCars(LocalDate currentDateForTest) {
         // Set up cars with upcoming Itp Expiry Date in MORE than daysUntilItpExpires
         victorsCarWithoutUpcomingItp = new Car("B 725 MIH", currentDateForTest.plus(daysToNotifyInAdvance).plus(Days.THREE), victor);
-        victor.addCar(victorsCarWithoutUpcomingItp);
 
         // Set up cars with upcoming Itp Expiry Date in EXACTLY daysUntilItpExpires
         mihneasCarWithUpcomingItp = new Car("B 23 BUB", currentDateForTest.plus(daysToNotifyInAdvance), mihnea);
         mihneasOtherCarWithUpcomingItp = new Car("B 45 MIC", currentDateForTest.plus(daysToNotifyInAdvance), mihnea);
-        mihnea.addCar(mihneasCarWithUpcomingItp);
-        mihnea.addCar(mihneasOtherCarWithUpcomingItp);
-        bunusCar = new Car("AG 88 VEE", currentDateForTest.plus(daysToNotifyInAdvance), bunu);
-        bunu.addCar(bunusCar);
+        bunusCarWithUpcomingItp = new Car("AG 88 VEE", currentDateForTest.plus(daysToNotifyInAdvance), bunu);
 
         // Set up cars with upcoming Itp Expiry Date in LESS than daysUntilItpExpires
         danielsCar = new Car("B 33 DPT", currentDateForTest.plus(Days.ONE), daniel);
-        daniel.addCar(danielsCar);
 
         expectedCars = Arrays.asList(victorsCarWithoutUpcomingItp,
                 mihneasCarWithUpcomingItp,
                 mihneasOtherCarWithUpcomingItp,
-                bunusCar,
+                bunusCarWithUpcomingItp,
                 danielsCar);
     }
 
@@ -109,7 +104,7 @@ public abstract class AbstractTestEnvironmentSetup {
 
         } catch (Exception e) {
 
-            LOGGER.error("---->>>> Error occurred when adding clients !! Rolling back. <<<<----");
+            LOGGER.error("---->>>> Error occurred when adding clients !! Rolling back. {}<<<<----" );
             e.printStackTrace();
             if (txt != null) {
                 txt.rollback();
@@ -127,12 +122,10 @@ public abstract class AbstractTestEnvironmentSetup {
         Transaction txt = null;
         try {
             txt = session.beginTransaction();
-            for (CarOwner carOwner : carOwners) {
-                Object persistedCarOwner = session.get(CarOwner.class, carOwner.getTelephoneNumber());
-                if (persistedCarOwner != null) {
-                    session.delete(persistedCarOwner);
-                }
-            }
+            String deleteAllCarsDataString = "delete from Car";
+            String deleteAllCarOwnersDataString = "delete from CarOwner";
+            session.createQuery(deleteAllCarsDataString).executeUpdate();
+            session.createQuery(deleteAllCarOwnersDataString).executeUpdate();
             txt.commit();
             LOGGER.info("---->>>> All cars and owners removed from DB! <<<<----");
         } catch (Exception e) {

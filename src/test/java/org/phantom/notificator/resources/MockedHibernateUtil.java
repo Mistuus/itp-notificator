@@ -1,9 +1,11 @@
-package org.phantom.notificator.util;
+package org.phantom.notificator.resources;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.phantom.notificator.util.HibernateUtil;
+import org.phantom.notificator.util.PropertiesRetrievalUtil;
 
 import java.net.URL;
 
@@ -33,6 +35,8 @@ public class MockedHibernateUtil {
             // Create the SessionFactory from hibernate.cfg.xml
             Configuration configuration = new Configuration();
             System.out.println(URL_PREFIX + getDbFilePath() + URL_SUFFIX);
+            configuration.getProperties().setProperty("hibernate.connection.username", PropertiesRetrievalUtil.getProperty("test_db"));
+            configuration.getProperties().setProperty("hibernate.connection.password", PropertiesRetrievalUtil.getProperty("test_db_password"));
             configuration.getProperties().setProperty("hibernate.connection.url", URL_PREFIX + getDbFilePath() + URL_SUFFIX);
             configuration.configure();
 
@@ -53,6 +57,7 @@ public class MockedHibernateUtil {
 
         if (resource != null) {
             absolutePath = resource.getPath();
+            System.out.println("---> Path is " + absolutePath);
             // remove the first character, '\' and the suffix '.mv.db'
             return absolutePath.substring(1, absolutePath.indexOf(".mv.db"));
         } else {
