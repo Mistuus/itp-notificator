@@ -9,11 +9,13 @@ import java.awt.*;
 /**
  * Created by mihne on 8/26/2015.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class MainMenu extends JFrame {
+    private static final Dimension PREFERRED_SIZE = new Dimension(500, 500);
     private JButton modifyButton;
     private JButton viewCarsButton1;
     private JButton addButton;
-    private JPanel panel1;
+    private JPanel panel;
     private CarMapper carMapper;
     private CarOwnerMapper carOwnerMapper;
 
@@ -21,19 +23,26 @@ public class MainMenu extends JFrame {
         super("Main Menu");
         this.carMapper = carMapper;
         this.carOwnerMapper = carOwnerMapper;
-        add(panel1);
-        setLocationRelativeTo(null);
+        add(panel);
+        setUpButtonListeners();
+        setPreferredSize(PREFERRED_SIZE);
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    private void setUpButtonListeners() {
         viewCarsButton1.addActionListener(e -> {
             new ViewCars(carMapper, carOwnerMapper);
             setVisible(false);
         });
+
         addButton.addActionListener(e -> {
             new AddCar(carMapper, carOwnerMapper);
             setVisible(false);
         });
+
         modifyButton.addActionListener(e -> {
             new SelectCars(carMapper, carOwnerMapper);
             setVisible(false);
@@ -41,18 +50,9 @@ public class MainMenu extends JFrame {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         addButton = new JButton();
         viewCarsButton1 = new JButton();
         modifyButton = new JButton();
-        addButton.setPreferredSize(new Dimension(10, 10));
-        viewCarsButton1.setPreferredSize(new Dimension(10, 10));
-        modifyButton.setPreferredSize(new Dimension(10, 10));
-        panel1 = new JPanel();
-        panel1.setPreferredSize(new Dimension(500, 500));
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = screenSize.height;
-        int width = screenSize.width;
-        setSize(width / 2, height / 2);
+        panel = new JPanel();
     }
 }

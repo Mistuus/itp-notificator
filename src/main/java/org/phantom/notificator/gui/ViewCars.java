@@ -12,10 +12,11 @@ import java.awt.*;
 /**
  * Created by mihne_000 on 6/30/2015.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class ViewCars extends JFrame {
 
-    public static final Dimension PREFERRED_DIMENSION = new Dimension(500, 500);
-    public static final String EMPTY_STRING = "";
+    private static final Dimension PREFERRED_DIMENSION = new Dimension(500, 500);
+    private static final String EMPTY_STRING = "";
     private JTable carsTable;
     private JButton addButton;
     private JButton modifyButton;
