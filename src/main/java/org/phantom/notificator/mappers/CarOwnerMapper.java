@@ -28,13 +28,13 @@ public class CarOwnerMapper {
         this.sessionFactory = sessionFactory;
     }
 
-    public boolean isValidCarOwner(CarOwner carOwner) {
+    public Set<ConstraintViolation<CarOwner>> getValidationErrorSet(CarOwner carOwner) {
         Set<ConstraintViolation<CarOwner>> validationErrorsSet = ValidationUtil.getValidator().validate(carOwner);
-        return validationErrorsSet.isEmpty();
+        return validationErrorsSet;
     }
 
     public boolean isCarOwnerInDb(CarOwner carOwner) {
-        return isValidCarOwner(carOwner) && isNumberInDb(carOwner.getTelephoneNumber());
+        return getValidationErrorSet(carOwner).isEmpty() && isNumberInDb(carOwner.getTelephoneNumber());
     }
 
     public boolean isNumberInDb(String carOwnerTelephoneNo) {
@@ -85,6 +85,7 @@ public class CarOwnerMapper {
         return carOwner;
     }
 
+    //TODO: Validate the owner before adding him
     public boolean addCarOwner(CarOwner carOwnerToAdd) {
         // is car owner already in DB
         if (isCarOwnerInDb(carOwnerToAdd)) {
@@ -156,6 +157,7 @@ public class CarOwnerMapper {
         }
     }
 
+    //TODO: vic: move method to carMapper. Remove carOwner parameter
     public boolean addCarToOwner(CarOwner carOwner, Car car) {
         CarMapper carMapper = new CarMapper(this.sessionFactory);
 

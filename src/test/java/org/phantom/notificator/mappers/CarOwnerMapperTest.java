@@ -39,7 +39,7 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testIsValidCarOwner() {
-        Assert.assertTrue(mapper.isValidCarOwner(victor));
+        Assert.assertTrue(mapper.getValidationErrorSet(victor).isEmpty());
     }
 
     @Test
@@ -57,12 +57,12 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
         CarOwner invalidEmail = new CarOwner("V", "P", "0123456789");
         invalidEmail.setEmail("vpyahoo.com");
 
-        Assert.assertFalse(mapper.isValidCarOwner(noFirstName));
-        Assert.assertFalse(mapper.isValidCarOwner(noLastName));
-        Assert.assertFalse(mapper.isValidCarOwner(noPhoneNumber));
-        Assert.assertFalse(mapper.isValidCarOwner(lessThan10Digits));
-        Assert.assertFalse(mapper.isValidCarOwner(moreThan13Digits));
-        Assert.assertFalse(mapper.isValidCarOwner(invalidEmail));
+        Assert.assertFalse(mapper.getValidationErrorSet(noFirstName).isEmpty());
+        Assert.assertFalse(mapper.getValidationErrorSet(noLastName).isEmpty());
+        Assert.assertFalse(mapper.getValidationErrorSet(noPhoneNumber).isEmpty());
+        Assert.assertFalse(mapper.getValidationErrorSet(lessThan10Digits).isEmpty());
+        Assert.assertFalse(mapper.getValidationErrorSet(moreThan13Digits).isEmpty());
+        Assert.assertFalse(mapper.getValidationErrorSet(invalidEmail).isEmpty());
     }
 
     @Test
@@ -222,7 +222,7 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testAddCarToOwner() throws Exception {
-        Car carToAdd = new Car("AG 07 ABC", currentDateForTest);
+        Car carToAdd = new Car("AG 07 ABC", currentDateForTest, daniel);
         Assert.assertTrue(mapper.addCarToOwner(daniel, carToAdd));
         removeCar(carToAdd);
     }
