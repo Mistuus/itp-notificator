@@ -103,9 +103,9 @@ public class ViewCars extends JFrame {
 
         // Create the JTable to display the cars
         Object rowData[][] = new Object[0][3];
-        Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Data exp. ITP"};
+        Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Firma", "Email", "Data exp. ITP"};
         this.carsTable = new JTable(new NonEditableTableModel(rowData, columnNames));
-
+        this.carsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         // Populate the cars table
         refreshCarsTable();
     }
