@@ -20,19 +20,19 @@ public class Car {
     @Id
     @Column(name = "CAR_REGISTRATION_NUMBER")
     @Length(min = 8, max = 10,
-            message = "Car Registration Number must be between 8 and 10 characters")
-    @NotNull(message = "Car Registration Number cannot be null")
+            message = "Numarul de inmatriculare trebuie sa fie intre 8 si 10 caractere.")
+    @NotNull(message = "Numarul de inregistrare nu poate fi null.")
     private String carRegistrationNumber;
 
     @Column(name = "ITP_EXPIRY_DATE")
-    @NotNull(message = "ITP Expiry Date must not be null")
+    @NotNull(message = "Data de expirare ITP nu trebuie sa fie goala.")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate itpExpiryDate;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade =
             {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @NotNull(message = "Car must have an owner")
+    @NotNull(message = "Masina trebuie sa aiba un proprietar.")
     private CarOwner carOwner;
 
     public Car() {

@@ -17,11 +17,12 @@ import java.util.Set;
 public class CarOwner {
 
     @Column(name = "FIRST_NAME")
-    @NotNull(message = "First Name must not be null")
+    @NotNull(message = "Prenumele nu trebuie sa fie null.")
     private String firstName;
 
     @Column(name = "LAST_NAME")
-    @NotNull(message = "Last Name must not be null")
+    @NotNull(message = "Numele nu trebuie sa fie gol.")
+    @Length(min = 1, message = "Numele trebuie sa aiba cel putin 1 caracter.")
     private String lastName;
 
     @Column(name = "COMPANY_NAME")
@@ -33,9 +34,9 @@ public class CarOwner {
 
     @Id
     @Column(name = "TELEPHONE_NO")
-    @NotNull(message = "Telephone Number cannot be null")
+    @NotNull(message = "Numarul de telefon nu trebuie sa fie gol.")
     @Length(min = 10, max = 13,
-            message = "Telephone number must be between 10 and 13 characters")
+            message = "Numarul de telefon trebuie sa fie intre 10 si 13 caractere.")
     private String telephoneNumber;
 
     @OneToMany(mappedBy = "carOwner",
