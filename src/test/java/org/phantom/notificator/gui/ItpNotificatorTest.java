@@ -1,8 +1,9 @@
-package org.phantom.notificator.schedulers;
+package org.phantom.notificator.gui;
 
 import org.hibernate.SessionFactory;
 import org.phantom.notificator.resources.AbstractTestEnvironmentSetup;
 import org.phantom.notificator.resources.MockedHibernateUtil;
+import org.phantom.notificator.schedulers.ItpNotificator;
 
 /**
  * Created by mihne on 8/19/2015.
