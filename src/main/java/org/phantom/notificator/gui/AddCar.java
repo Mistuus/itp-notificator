@@ -16,6 +16,7 @@ import java.util.Set;
  */
 public class AddCar extends JFrame {
     private static final String NEW_LINE = "\n";
+    private static final Dimension PREFERRED_SIZE = new Dimension(500, 500);
     private final CarOwnerMapper carOwnerMapper;
     private final CarMapper carMapper;
     private JPanel panel;
@@ -30,7 +31,6 @@ public class AddCar extends JFrame {
     private JButton backButton;
     private JButton adaugaMasinaButton;
     private JLabel detaliiClientLabel;
-    private static final Dimension PREFERRED_SIZE = new Dimension(500, 500);
 
     public AddCar(CarMapper carMapper, CarOwnerMapper carOwnerMapper) {
         super("Add Cars");
@@ -93,10 +93,10 @@ public class AddCar extends JFrame {
 
     private void validateAndInsert(CarOwner owner, Car carToAdd) {
         Set<ConstraintViolation<CarOwner>> carOwnerValidationErrors = carOwnerMapper.getValidationErrorSet(owner);
-        Set<ConstraintViolation<Car>> carValidationErrors = carMapper.isValidCar(carToAdd);
+        Set<ConstraintViolation<Car>> carValidationErrors = carMapper.getValidationErrorSet(carToAdd);
 
         if (carOwnerValidationErrors.isEmpty() && carValidationErrors.isEmpty()) {
-            boolean isCarAdded = carOwnerMapper.addCarToOwner(owner, carToAdd);
+            boolean isCarAdded = carMapper.addCar(carToAdd);
             displayInsertionStatus(isCarAdded, carToAdd.getCarRegistrationNumber());
         } else {
             StringBuilder errorMessageForDisplay = getValidationErrorMessageForDisplay(carOwnerValidationErrors, carValidationErrors);

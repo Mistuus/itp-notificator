@@ -4,7 +4,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.util.ValidationUtil;
 import org.slf4j.Logger;
@@ -29,45 +28,10 @@ public class CarOwnerMapper {
     }
 
     public Set<ConstraintViolation<CarOwner>> getValidationErrorSet(CarOwner carOwner) {
-        Set<ConstraintViolation<CarOwner>> validationErrorsSet = ValidationUtil.getValidator().validate(carOwner);
-        return validationErrorsSet;
-    }
-
-    public boolean isCarOwnerInDb(CarOwner carOwner) {
-        return getValidationErrorSet(carOwner).isEmpty() && isNumberInDb(carOwner.getTelephoneNumber());
-    }
-
-    public boolean isNumberInDb(String carOwnerTelephoneNo) {
-        Set<ConstraintViolation<CarOwner>> telephoneNumberValidationErrors =
-                ValidationUtil.getValidator().validateValue(CarOwner.class, "telephoneNumber", carOwnerTelephoneNo);
-
-        if (telephoneNumberValidationErrors.size() != 0) {
-            return false;
-        }
-
-        Session currentSession = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
-        CarOwner carOwner;
-        try {
-            transaction = currentSession.beginTransaction();
-            carOwner = (CarOwner) currentSession.get(CarOwner.class, carOwnerTelephoneNo);
-            transaction.rollback();
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            LOGGER.error("Error while searching for {}! Error: {}", carOwnerTelephoneNo, e.getMessage());
-            throw e;
-        }
-
-        return carOwner != null;
+        return ValidationUtil.getValidator().validate(carOwner);
     }
 
     public CarOwner retrieveCarOwnerWithTelephoneNo(String telephoneNo) {
-        if (!isNumberInDb(telephoneNo)) {
-            return null;
-        }
-
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         CarOwner carOwner = null;
@@ -80,18 +44,13 @@ public class CarOwnerMapper {
                 transaction.rollback();
             }
             LOGGER.error("Error while retrieving {}! Error: {}", carOwner, e.getMessage());
+            return null;
         }
 
         return carOwner;
     }
 
-    //TODO: Validate the owner before adding him
     public boolean addCarOwner(CarOwner carOwnerToAdd) {
-        // is car owner already in DB
-        if (isCarOwnerInDb(carOwnerToAdd)) {
-            return false;
-        }
-
         // create session, transaction, commit or rollback if error
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
@@ -109,11 +68,7 @@ public class CarOwnerMapper {
         }
     }
 
-    public boolean removeCarOwner(CarOwner carOwner) {
-        if (!isCarOwnerInDb(carOwner)) {
-            return false;
-        }
-
+    private boolean removeCarOwner(CarOwner carOwner) {
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
@@ -136,10 +91,6 @@ public class CarOwnerMapper {
     }
 
     public boolean changeDetails(CarOwner modifiedCarOwner) {
-        if (!isCarOwnerInDb(modifiedCarOwner)) {
-            return false;
-        }
-
         // create session, transaction, commit or rollback if error
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
@@ -157,31 +108,4 @@ public class CarOwnerMapper {
         }
     }
 
-    //TODO: vic: move method to carMapper. Remove carOwner parameter
-    public boolean addCarToOwner(CarOwner carOwner, Car car) {
-        CarMapper carMapper = new CarMapper(this.sessionFactory);
-
-        // Case 1: Car already in DB for different Owner => Do nothing. Must delete existing car first and then add to new owner
-        if (carMapper.isCarInDb(car)) {
-            return false;
-        }
-
-        // Case 2: No Owner & No Car in DB => add both
-        // Case 3: Owner exists & No Car in DB => add car to owner
-        carOwner.addCar(car);
-        Session currentSession = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
-        try {
-            transaction = currentSession.beginTransaction();
-            currentSession.saveOrUpdate(carOwner);
-            transaction.commit();
-            return true;
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            LOGGER.error("Error while adding {} to {}! {}", car, carOwner, e.getMessage());
-            return false;
-        }
-    }
 }
