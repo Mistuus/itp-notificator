@@ -18,7 +18,7 @@ import java.awt.*;
 public class ViewCars extends JFrame {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ViewCars.class);
-    private static final Dimension PREFERRED_DIMENSION = new Dimension(500, 500);
+    private static final Dimension PREFERRED_DIMENSION = new Dimension(1000, 500);
     private static final String EMPTY_STRING = "";
     private JTable carsTable;
     private JButton addButton;
@@ -109,7 +109,7 @@ public class ViewCars extends JFrame {
         panel = new JPanel();
 
         // Create the JTable to display the cars
-        Object rowData[][] = new Object[0][3];
+        Object rowData[][] = new Object[0][5];
         Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Firma", "Email", "Data exp. ITP"};
         this.carsTable = new JTable(new NonEditableTableModel(rowData, columnNames));
         this.carsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

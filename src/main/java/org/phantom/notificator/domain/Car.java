@@ -61,12 +61,12 @@ public class Car {
         return carRegistrationNumber;
     }
 
-    private void setCarRegistrationNumber(String carRegistrationNumber) {
-        this.carRegistrationNumber = carRegistrationNumber;
+    public Object[] setDetailsVector() {
+        return new Object[]{this.getCarOwner().getLastName() + " " + this.getCarOwner().getFirstName(), this.getCarRegistrationNumber(), this.getCarOwner().getTelephoneNumber(), this.getCarOwner().getCompanyName(), this.getCarOwner().getEmail(), this.getItpExpiryDate()};
     }
 
-    public Object[] setDetailsVector() {
-        return new Object[]{this.getCarOwner().getLastName() + " " + this.getCarOwner().getFirstName(), this.getCarRegistrationNumber(), this.getCarOwner().getTelephoneNumber(), this.getItpExpiryDate()};
+    private void setCarRegistrationNumber(String carRegistrationNumber) {
+        this.carRegistrationNumber = carRegistrationNumber;
     }
 
     public LocalDate getItpExpiryDate() {
