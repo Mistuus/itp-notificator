@@ -113,6 +113,7 @@ public class ViewCars extends JFrame {
         Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Firma", "Email", "Data exp. ITP"};
         this.carsTable = new JTable(new NonEditableTableModel(rowData, columnNames));
         this.carsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.carsTable.setAutoCreateRowSorter(true);
         // Populate the cars table
         refreshCarsTable();
     }
