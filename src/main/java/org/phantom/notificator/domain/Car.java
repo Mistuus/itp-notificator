@@ -60,12 +60,13 @@ public class Car {
     public String getCarRegistrationNumber() {
         return carRegistrationNumber;
     }
-    public Object[] setDetailsVector()
-    {
-        return new Object[]{this.getCarOwner().getLastName()+" "+this.getCarOwner().getFirstName(),this.getCarRegistrationNumber(),this.getCarOwner().getTelephoneNumber(),this.getItpExpiryDate()};
-    }
+
     private void setCarRegistrationNumber(String carRegistrationNumber) {
         this.carRegistrationNumber = carRegistrationNumber;
+    }
+
+    public Object[] setDetailsVector() {
+        return new Object[]{this.getCarOwner().getLastName() + " " + this.getCarOwner().getFirstName(), this.getCarRegistrationNumber(), this.getCarOwner().getTelephoneNumber(), this.getItpExpiryDate()};
     }
 
     public LocalDate getItpExpiryDate() {

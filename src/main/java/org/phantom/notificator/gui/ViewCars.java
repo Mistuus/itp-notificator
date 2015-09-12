@@ -4,6 +4,8 @@ import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.mappers.CarOwnerMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +17,7 @@ import java.awt.*;
 @SuppressWarnings("DefaultFileTemplate")
 public class ViewCars extends JFrame {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(ViewCars.class);
     private static final Dimension PREFERRED_DIMENSION = new Dimension(500, 500);
     private static final String EMPTY_STRING = "";
     private JTable carsTable;
@@ -44,11 +47,13 @@ public class ViewCars extends JFrame {
 
     private void setUpButtonListeners() {
         addButton.addActionListener(e -> {
+            LOGGER.info("-->> User pressed AddCar button...redirecting to AddCarMenu <<--");
             new AddCar(carMapper, carOwnerMapper);
             setVisible(false);
         });
 
         removeButton.addActionListener(e -> {
+            LOGGER.info("-->> User pressed RemoveButton. <<--");
             String carRegistrationNumber = getSelectedCarRegistrationNumber();
             boolean isCarDeleted = carMapper.removeCar(carRegistrationNumber);
             if (isCarDeleted) {
@@ -66,6 +71,7 @@ public class ViewCars extends JFrame {
         });
 
         modifyButton.addActionListener(e -> {
+            LOGGER.info("-->> User pressed ModifyButton <<--");
             String carRegistrationNumber = getSelectedCarRegistrationNumber();
             if (carRegistrationNumber.isEmpty()) {
                 JOptionPane.showMessageDialog(panel,
@@ -82,6 +88,7 @@ public class ViewCars extends JFrame {
         });
 
         backToMainMenuButton.addActionListener(e -> {
+            LOGGER.info("-->> User pressed BackToMainMenuButton...redirecting to MainMenu <<--");
             new MainMenu(carMapper, carOwnerMapper);
             setVisible(false);
         });
@@ -111,6 +118,7 @@ public class ViewCars extends JFrame {
     }
 
     private void refreshCarsTable() {
+        LOGGER.info("-->> Refreshing CarsTable... <<--");
         NonEditableTableModel model = (NonEditableTableModel) this.carsTable.getModel();
         // Empty the Table Model of cars
         while (model.getRowCount() > 0) {
@@ -120,6 +128,7 @@ public class ViewCars extends JFrame {
         for (Car car : carMapper.retrieveAllCars()) {
             model.addRow(car.setDetailsVector());
         }
+        LOGGER.info("-->> Finished refreshing CarsTable. <<--");
     }
 
     private class NonEditableTableModel extends DefaultTableModel {

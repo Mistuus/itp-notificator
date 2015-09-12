@@ -8,7 +8,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.resources.AbstractTestEnvironmentSetup;
 import org.phantom.notificator.resources.MockedHibernateUtil;
@@ -130,27 +129,6 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
     }
 
     @Test
-    public void testNumberExistsInDb() throws Exception {
-        Assert.assertTrue(mapper.isNumberInDb(victor.getTelephoneNumber()));
-    }
-
-    @Test
-    public void testNumberDoesNotExistsInDb() {
-        Assert.assertFalse(mapper.isNumberInDb("9876543210"));
-    }
-
-    @Test
-    public void testCarOwnerExistsInDb() {
-        Assert.assertTrue(mapper.isCarOwnerInDb(victor));
-    }
-
-    @Test
-    public void testCarOwnerDoesNotExistInDb() {
-        CarOwner notPersistedCarOwner = new CarOwner("V", "P", "9876543210");
-        Assert.assertFalse(mapper.isCarOwnerInDb(notPersistedCarOwner));
-    }
-
-    @Test
     public void testRetrieveCarOwnerWithTelephoneNo() {
         Assert.assertEquals(victor, mapper.retrieveCarOwnerWithTelephoneNo(victor.getTelephoneNumber()));
     }
@@ -170,20 +148,6 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
         CarOwner newCarOwner = new CarOwner("V", "P", "9876543210");
         Assert.assertTrue(mapper.addCarOwner(newCarOwner));
         deleteCarOwner(newCarOwner);
-    }
-
-    @Test
-    public void testRemoveExistingCarOwner() throws Exception {
-        Assert.assertTrue(mapper.removeCarOwner(victor));
-        CarOwner deletedVictor = retrieveCarOwner(victor);
-        Assert.assertNull(deletedVictor);
-        addToDb(victor);
-    }
-
-    @Test
-    public void testDoNotRemoveNonExistentCarOwner() throws Exception {
-        CarOwner newCarOwner = new CarOwner("V", "P", "9876543210");
-        Assert.assertFalse(mapper.removeCarOwner(newCarOwner));
     }
 
     @Test
@@ -218,18 +182,6 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
     public void testChangeDetailsForNonExistingOwner() {
         CarOwner newCarOwner = new CarOwner("V", "P", "9876543210");
         Assert.assertFalse(mapper.changeDetails(newCarOwner));
-    }
-
-    @Test
-    public void testAddCarToOwner() throws Exception {
-        Car carToAdd = new Car("AG 07 ABC", currentDateForTest, daniel);
-        Assert.assertTrue(mapper.addCarToOwner(daniel, carToAdd));
-        removeCar(carToAdd);
-    }
-
-    @Test
-    public void testDoNotAddExistingCarToOwner() {
-        Assert.assertFalse(mapper.addCarToOwner(daniel, danielsCar));
     }
 
     private void deleteCarOwner(CarOwner newCarOwner) {
@@ -270,36 +222,6 @@ public class CarOwnerMapperTest extends AbstractTestEnvironmentSetup {
         try {
             transaction = currentSession.beginTransaction();
             currentSession.persist(carOwner);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw e;
-        }
-    }
-
-    private void removeCar(Car carToDelete) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
-        try {
-            transaction = currentSession.beginTransaction();
-            currentSession.delete(carToDelete);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw e;
-        }
-    }
-
-    private void removeCarOwner(CarOwner carOwner) {
-        Session currentSession = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
-        try {
-            transaction = currentSession.beginTransaction();
-            currentSession.delete(carOwner);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

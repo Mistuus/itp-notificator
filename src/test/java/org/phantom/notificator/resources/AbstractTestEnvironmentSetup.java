@@ -18,7 +18,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 /**
- * Created by Master Victor on 06/07/2015.
+ * Created by Victor on 06/07/2015.
  */
 public abstract class AbstractTestEnvironmentSetup {
 
@@ -88,7 +88,6 @@ public abstract class AbstractTestEnvironmentSetup {
         carOwners = Arrays.asList(victor, mihnea, daniel, bunu);
     }
 
-    // todo: should we first delete and then add the objects????
     protected static void setUpCarsAndOwnersInDbAndOpenSession(SessionFactory sessionFactory) {
         LOGGER.info(" ---->>>> DB SETUP: Persisting Cars and Owners to DB <<<<----");
 

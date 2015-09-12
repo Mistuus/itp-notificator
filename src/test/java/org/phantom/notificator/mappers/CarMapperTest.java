@@ -45,45 +45,19 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testIsValidCar() throws Exception {
-        Assert.assertTrue(mapper.isValidCar(danielsCar).isEmpty());
+        Assert.assertTrue(mapper.getValidationErrorSet(danielsCar).isEmpty());
     }
 
     @Test
     public void testIsInvalidCar() {
         CarOwner testCarOwner = new CarOwner("Test", "User", "0741234567");
-        Car nullRegistrationNumber = new Car(null, currentDateForTest, testCarOwner);
         Car lessThan8Characters = new Car("abc", currentDateForTest, testCarOwner);
         Car moreThan10Characters = new Car("abc 123 abc", currentDateForTest, testCarOwner);
         Car noItpExpiryDate = new Car("AG 07 ABC", null, testCarOwner);
 
-        Assert.assertFalse(mapper.isValidCar(nullRegistrationNumber).isEmpty());
-        Assert.assertFalse(mapper.isValidCar(lessThan8Characters).isEmpty());
-        Assert.assertFalse(mapper.isValidCar(moreThan10Characters).isEmpty());
-        Assert.assertFalse(mapper.isValidCar(noItpExpiryDate).isEmpty());
-    }
-
-    @Test
-    public void testIsRegistrationNumberInDb() throws Exception {
-        String existingRegistrationNumber = danielsCar.getCarRegistrationNumber();
-        Assert.assertTrue(mapper.isRegistrationNumberInDb(existingRegistrationNumber));
-    }
-
-    @Test
-    public void testRegistrationNumberIsNotInDb() {
-        String nonExistentCarRegistrationNumber = "AG 123 ABC";
-        Assert.assertFalse(mapper.isRegistrationNumberInDb(nonExistentCarRegistrationNumber));
-    }
-
-    @Test
-    public void testIsCarInDb() throws Exception {
-        Assert.assertTrue(mapper.isCarInDb(danielsCar));
-    }
-
-    @Test
-    public void testCarIsNotInDb() {
-        Car nonExistentCar = new Car("AG 124 ABC", currentDateForTest, daniel);
-        Assert.assertFalse(mapper.isCarInDb(nonExistentCar));
-
+        Assert.assertFalse(mapper.getValidationErrorSet(lessThan8Characters).isEmpty());
+        Assert.assertFalse(mapper.getValidationErrorSet(moreThan10Characters).isEmpty());
+        Assert.assertFalse(mapper.getValidationErrorSet(noItpExpiryDate).isEmpty());
     }
 
     @Test
@@ -96,20 +70,6 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
     public void testRetrieveNoCar() {
         String nonExistentRegistrationNo = "AG 123 ABC";
         Assert.assertNull(mapper.retrieveCar(nonExistentRegistrationNo));
-    }
-
-    @Test
-    public void testRemoveExistingCar() throws Exception {
-        Assert.assertTrue(mapper.removeCar(danielsCar));
-        Car retrievedCar = retrieveCar(danielsCar);
-        Assert.assertNull(retrievedCar);
-        addToDb(danielsCar);
-    }
-
-    @Test
-    public void testDoNotRemoveNonExistentCar() throws Exception {
-        Car nonExistentCar = new Car("AG 07 ABC", currentDateForTest, bunu);
-        Assert.assertFalse(mapper.removeCar(nonExistentCar));
     }
 
     @Test
@@ -145,6 +105,18 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
     public void testDoNotChangeDetailsForNonExistentCar() {
         Car nonExistentCar = new Car("AG 07 ABC", currentDateForTest, bunu);
         Assert.assertFalse(mapper.changeCarDetails(nonExistentCar));
+    }
+
+    @Test
+    public void testAddCarToOwner() throws Exception {
+        Car carToAdd = new Car("AG 07 ABC", currentDateForTest, daniel);
+        Assert.assertTrue(mapper.addCar(carToAdd));
+        removeCar(carToAdd);
+    }
+
+    @Test
+    public void testDoNotAddExistingCarToOwner() {
+        Assert.assertFalse(mapper.addCar(danielsCar));
     }
 
 
@@ -186,6 +158,21 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
         try {
             transaction = currentSession.beginTransaction();
             currentSession.update(carToUpdate);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
+        }
+    }
+
+    private void removeCar(Car carToDelete) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = currentSession.beginTransaction();
+            currentSession.delete(carToDelete);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

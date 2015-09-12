@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.phantom.notificator.domain.Car;
-import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import java.util.Set;
  * Created by Master Victor on 06/07/2015.
  */
 @SuppressWarnings("DefaultFileTemplate")
-// TODO: Minimize the number of DB lookups we do when removing/adding cars/Owners
 public class CarMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarMapper.class);
@@ -29,45 +27,11 @@ public class CarMapper {
         this.sessionFactory = sessionFactory;
     }
 
-    public  Set<ConstraintViolation<Car>> isValidCar(Car carToValidate) {
+    public Set<ConstraintViolation<Car>> getValidationErrorSet(Car carToValidate) {
         return ValidationUtil.getValidator().validate(carToValidate);
     }
 
-    public boolean isRegistrationNumberInDb(String carRegistrationNo) {
-        Set<ConstraintViolation<CarMapper>> validationErrors = ValidationUtil.getValidator()
-                .validateValue(CarMapper.class, "carRegistrationNumber", carRegistrationNo);
-
-        if (!validationErrors.isEmpty()) {
-            return true;
-        }
-
-        Session currentSession = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
-        Car car;
-        try {
-            transaction = currentSession.beginTransaction();
-            car = (Car) currentSession.get(Car.class, carRegistrationNo);
-            transaction.rollback();
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            LOGGER.error("Error while searching for {}! Error: {}", carRegistrationNo, e.getMessage());
-            throw e;
-        }
-
-        return car != null;
-    }
-
-    public boolean isCarInDb(Car car) {
-        return isValidCar(car).isEmpty() && isRegistrationNumberInDb(car.getCarRegistrationNumber());
-    }
-
     public Car retrieveCar(String carRegistrationNo) {
-        if (!isRegistrationNumberInDb(carRegistrationNo)) {
-            return null;
-        }
-
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         Car car;
@@ -80,17 +44,19 @@ public class CarMapper {
                 transaction.rollback();
             }
             LOGGER.error("Error while retrieving {}! Error: {}", carRegistrationNo, e.getMessage());
-            throw e;
+            return null;
         }
 
         return car;
     }
 
-    public boolean removeCar(Car car) {
-        if (!isCarInDb(car)) {
-            return false;
-        }
 
+    public boolean removeCar(String carRegistrationNo) {
+        Car car = retrieveCar(carRegistrationNo);
+        return car != null && removeCar(car);
+    }
+
+    private boolean removeCar(Car car) {
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
@@ -107,16 +73,7 @@ public class CarMapper {
         }
     }
 
-    public boolean removeCar(String carRegistrationNo) {
-        Car car = retrieveCar(carRegistrationNo);
-        return car != null && removeCar(car);
-    }
-
     public boolean changeCarDetails(Car modifiedCar) {
-        if (!isCarInDb(modifiedCar)) {
-            return false;
-        }
-
         // create session, transaction, commit or rollback if error
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
@@ -133,8 +90,8 @@ public class CarMapper {
             return false;
         }
     }
-    public List<Car> retrieveAllCars()
-    {
+
+    public List<Car> retrieveAllCars() {
         Session currentSession = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
@@ -148,6 +105,32 @@ public class CarMapper {
             }
             LOGGER.error("Error while retrieving all cars! Returning empty list! Error: {}", e.getMessage());
             return Collections.emptyList();
+        }
+    }
+
+    public boolean addCar(Car car) {
+        // Case 1: Car already in DB for different Owner => Do nothing. Must delete existing car first and then add to new owner
+        if (retrieveCar(car.getCarRegistrationNumber()) != null) {
+            LOGGER.error("Car already exists in the DB for another client. " +
+                    "If this is incorrect, please delete it and insert it again.");
+            return false;
+        }
+
+        // Case 2: No Owner & No Car in DB => add both
+        // Case 3: Owner exists & No Car in DB => add car to owner
+        Session currentSession = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = currentSession.beginTransaction();
+            currentSession.saveOrUpdate(car);
+            transaction.commit();
+            return true;
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            LOGGER.error("Error while adding {} to {}! {}", car, e.getMessage());
+            return false;
         }
     }
 }
