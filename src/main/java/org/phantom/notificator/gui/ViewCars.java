@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by mihne_000 on 6/30/2015.
@@ -32,11 +34,16 @@ public class ViewCars extends JFrame {
     private JLabel windowTitle;
     private JButton backToMainMenuButton;
     private JButton removeButton;
+    private JTextField searchField;
+    private JButton cautaButton;
+    private JButton refreshButton;
+    private final CarOwnerMapper carOwnerMapper;
+    private final CarMapper carMapper;
     private Car selectedCar;
     private CarOwner carOwner;
 
     public ViewCars(CarMapper carMapper, CarOwnerMapper carOwnerMapper) {
-        super("View Cars");
+        super("Tabel Masini");
         this.carMapper = carMapper;
         this.carOwnerMapper = carOwnerMapper;
         add(panel);
@@ -89,11 +96,29 @@ public class ViewCars extends JFrame {
                 setVisible(false);
             }
         });
+        cautaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = searchField.getText();
+                NonEditableTableModel model = (NonEditableTableModel) carsTable.getModel();
+                while (model.getRowCount() > 0) {
+                    model.removeRow(0);
+                }
+                for (Car car : carMapper.retrieveAllCars()) {
+                    if (car.toString().toLowerCase().contains(searchText.toLowerCase())) {
+                        model.addRow(car.getRowData());
+                    }
+                }
+            }
+        });
 
         backToMainMenuButton.addActionListener(e -> {
             LOGGER.info("-->> User pressed BackToMainMenuButton...redirecting to MainMenu <<--");
             new MainMenu(carMapper, carOwnerMapper);
             setVisible(false);
+        });
+        refreshButton.addActionListener(e -> {
+            refreshCarsTable();
         });
     }
 
