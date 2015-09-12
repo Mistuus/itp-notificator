@@ -128,33 +128,27 @@ public class ConfirmDetails extends JFrame {
     private void createUIComponents() {
         panel = new JPanel(new BorderLayout());
 
-        Object rowData[][] = new Object[0][5];
+        Object rowDataWithInitialClientDetails[][] = {{owner.getFirstName(), owner.getLastName(), owner.getCompanyName(), owner.getEmail(), owner.getTelephoneNumber()}};//new Object[0][5];
         Object clientDetailsColumnNames[] = {"Prenume", "Nume", "Firma", "Email", "Nr. Telefon"};
 
         // Create non-editable table for displaying the old CAR OWNER values
-        NonEditableTableModel oldClientDetailsModel = new NonEditableTableModel(rowData, clientDetailsColumnNames);
+        NonEditableTableModel oldClientDetailsModel = new NonEditableTableModel(rowDataWithInitialClientDetails, clientDetailsColumnNames);
         oldClientDetailsTable = new JTable(oldClientDetailsModel);
-        Object[] clientDetailsData = {owner.getFirstName(), owner.getLastName(), owner.getCompanyName(), owner.getEmail(), owner.getTelephoneNumber()};
-        oldClientDetailsModel.addRow(clientDetailsData);
 
         // Create the editable table for displaying the user-modified CAR OWNER values
-        EditableClientDetailsModel modifiableClientDetailsModel = new EditableClientDetailsModel(rowData, clientDetailsColumnNames);
+        EditableClientDetailsModel modifiableClientDetailsModel = new EditableClientDetailsModel(rowDataWithInitialClientDetails, clientDetailsColumnNames);
         newClientDetailsTable = new JTable(modifiableClientDetailsModel);
-        modifiableClientDetailsModel.addRow(clientDetailsData);
 
-        Object rowData1[][] = new Object[0][2];
+        Object rowDataForInitialCarDetails[][] = {{car.getCarRegistrationNumber(), car.getItpExpiryDate()}};
         Object carDetailsColumnNames[] = {"Nr. Inmatriculare", "Data exp. ITP"};
 
         // Create the non-editable table for displaying the old CAR values
-        NonEditableTableModel oldCarDetailsModel = new NonEditableTableModel(rowData1, carDetailsColumnNames);
+        NonEditableTableModel oldCarDetailsModel = new NonEditableTableModel(rowDataForInitialCarDetails, carDetailsColumnNames);
         oldCarDetailsTable = new JTable(oldCarDetailsModel);
-        Object[] carDetails = {car.getCarRegistrationNumber(), car.getItpExpiryDate()};
-        oldCarDetailsModel.addRow(carDetails);
 
         // Create the non-editable table for displaying the user-modified CAR values
-        EditableCarDetailsModel modifiableCarDetailsModel = new EditableCarDetailsModel(rowData1, carDetailsColumnNames);
+        EditableCarDetailsModel modifiableCarDetailsModel = new EditableCarDetailsModel(rowDataForInitialCarDetails, carDetailsColumnNames);
         newCarDetailsTable = new JTable(modifiableCarDetailsModel);
-        modifiableCarDetailsModel.addRow(carDetails);
     }
 
     private static class EditableClientDetailsModel extends DefaultTableModel {
