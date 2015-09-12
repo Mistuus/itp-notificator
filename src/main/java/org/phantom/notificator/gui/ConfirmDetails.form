@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="org.phantom.notificator.gui.ConfirmDetails">
-  <grid id="27dc6" binding="panel1" custom-create="true" layout-manager="GridLayoutManager" row-count="9" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="panel" custom-create="true" layout-manager="GridLayoutManager" row-count="9" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="67" y="53" width="453" height="335"/>
@@ -26,7 +26,7 @@
       </component>
       <component id="91339" class="javax.swing.JLabel">
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Detalii Client"/>
@@ -34,7 +34,7 @@
       </component>
       <component id="9b078" class="javax.swing.JLabel">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Vechi:"/>
@@ -42,7 +42,7 @@
       </component>
       <component id="647b6" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Noi:"/>
@@ -50,7 +50,7 @@
       </component>
       <component id="6695b" class="javax.swing.JLabel">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Detalii Masina"/>
@@ -58,7 +58,7 @@
       </component>
       <component id="c9588" class="javax.swing.JLabel">
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Vechi:"/>
@@ -66,7 +66,7 @@
       </component>
       <component id="1acfe" class="javax.swing.JLabel">
         <constraints>
-          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Noi:"/>
@@ -95,7 +95,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="75c65" class="javax.swing.JTable" binding="table1" custom-create="true" default-binding="true">
+          <component id="75c65" class="javax.swing.JTable" binding="oldClientDetailsTable" custom-create="true" default-binding="true">
             <constraints/>
             <properties/>
           </component>
@@ -108,7 +108,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="ff406" class="javax.swing.JTable" binding="table2" custom-create="true" default-binding="true">
+          <component id="ff406" class="javax.swing.JTable" binding="newClientDetailsTable" custom-create="true" default-binding="true">
             <constraints/>
             <properties/>
           </component>
@@ -121,7 +121,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="cbfb2" class="javax.swing.JTable" binding="table3" custom-create="true" default-binding="true">
+          <component id="cbfb2" class="javax.swing.JTable" binding="oldCarDetailsTable" custom-create="true" default-binding="true">
             <constraints/>
             <properties/>
           </component>
@@ -134,7 +134,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="4765c" class="javax.swing.JTable" binding="table4" custom-create="true" default-binding="true">
+          <component id="4765c" class="javax.swing.JTable" binding="newCarDetailsTable" custom-create="true" default-binding="true">
             <constraints/>
             <properties/>
           </component>
