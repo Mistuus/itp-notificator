@@ -126,7 +126,7 @@ public class ViewCars extends JFrame {
         }
         // Reload the cars in the table
         for (Car car : carMapper.retrieveAllCars()) {
-            model.addRow(car.setDetailsVector());
+            model.addRow(car.getRowData());
         }
         LOGGER.info("-->> Finished refreshing CarsTable. <<--");
     }
