@@ -1,21 +1,13 @@
 package org.phantom.notificator.gui;
 
-import org.joda.time.LocalDate;
-import org.mockito.cglib.core.Local;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.mappers.CarOwnerMapper;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by mihne_000 on 7/6/2015.
@@ -45,40 +37,31 @@ public class ConfirmDetails extends JFrame{
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        backToMainMenuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new MainMenu2(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        backToMainMenuButton.addActionListener(e -> {
+            new MainMenu(carMapper, carOwnerMapper);
+            setVisible(false);
         });
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ViewCars(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
+        backButton.addActionListener(e -> {
+            new ViewCars(carMapper, carOwnerMapper);
+            setVisible(false);
         });
-        confirmDetailsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String fname= (String) table2.getModel().getValueAt(0,0);
-                String lname= (String) table2.getModel().getValueAt(0,1);
-                String compname=(String) table2.getModel().getValueAt(0,2);
-                String email=(String) table2.getModel().getValueAt(0,3);
-                String telNo=(String) table2.getModel().getValueAt(0,4);
-                //String itpString=(String) table4.getModel().getValueAt(0,1);
-                prop.setFirstName(fname);
-                prop.setLastName(lname);
-                prop.setCompanyName(compname);
-                prop.setEmail(email);
-                //LocalDate itpDate = LocalDate.parse(itpString);
-                //car.setItpExpiryDate(itpDate);
-                carMapper.changeCarDetails(car);
-                setVisible(false);
-                new MainMenu2(carMapper,carOwnerMapper);
-            }
+        confirmDetailsButton.addActionListener(e -> {
+            String fname = (String) table2.getModel().getValueAt(0, 0);
+            String lname = (String) table2.getModel().getValueAt(0, 1);
+            String compname = (String) table2.getModel().getValueAt(0, 2);
+            String email = (String) table2.getModel().getValueAt(0, 3);
+            String telNo = (String) table2.getModel().getValueAt(0, 4);
+            //String itpString=(String) table4.getModel().getValueAt(0,1);
+            prop.setFirstName(fname);
+            prop.setLastName(lname);
+            prop.setCompanyName(compname);
+            prop.setEmail(email);
+            //LocalDate itpDate = LocalDate.parse(itpString);
+            //car.setItpExpiryDate(itpDate);
+            carMapper.changeCarDetails(car);
+            setVisible(false);
+            new MainMenu(carMapper, carOwnerMapper);
         });
     }
     private void createUIComponents() {
@@ -90,7 +73,7 @@ public class ConfirmDetails extends JFrame{
         int width = screenSize.width;
         setSize(width / 2, height / 2);
         Object rowData[][]=new Object[0][5];
-        Object columnNames[]={"First Name","Last Name","Company Name","Email","Telephone No"};
+        Object columnNames[] = {"Prenume", "Nume", "Firma", "Email", "Nr. Telefon"};
         table1=new JTable(new DefaultTableModel(rowData,columnNames){
             public boolean isCellEditable(int rowIndex, int columnIndex)
             {
@@ -103,7 +86,7 @@ public class ConfirmDetails extends JFrame{
         DefaultTableModel model2=(DefaultTableModel) table2.getModel();
         model2.addRow(new Object[]{prop.getFirstName(),prop.getLastName(),prop.getCompanyName(),prop.getEmail(),prop.getTelephoneNumber()});
         Object rowData1[][]=new Object[0][2];
-        Object columnNames1[]={"Reg. No","ITP date"};
+        Object columnNames1[] = {"Nr. Inmatriculare", "Data exp. ITP"};
         table3=new JTable(new DefaultTableModel(rowData1,columnNames1){
             public boolean isCellEditable(int rowIndex, int columnIndex)
             {
