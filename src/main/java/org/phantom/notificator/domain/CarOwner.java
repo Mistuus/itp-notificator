@@ -29,7 +29,7 @@ public class CarOwner {
     private String companyName;
 
     @Column(name = "EMAIL")
-    @Email
+    @Email(message = "Email-ul trebuie sa fie de forma *@*.com (Exemplu: vector@yahoo.com)")
     private String email;
 
     @Id

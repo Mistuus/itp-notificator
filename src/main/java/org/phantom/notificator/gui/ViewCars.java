@@ -21,7 +21,7 @@ import java.awt.*;
 public class ViewCars extends JFrame {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ViewCars.class);
-    private static final Dimension PREFERRED_DIMENSION = new Dimension(500, 500);
+    private static final Dimension PREFERRED_DIMENSION = new Dimension(1000, 500);
     private static final String EMPTY_STRING = "";
     private final CarOwnerMapper carOwnerMapper;
     private final CarMapper carMapper;
@@ -112,10 +112,11 @@ public class ViewCars extends JFrame {
         panel = new JPanel();
 
         // Create the JTable to display the cars
-        Object rowData[][] = new Object[0][3];
-        Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Data exp. ITP"};
+        Object rowData[][] = new Object[0][5];
+        Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Firma", "Email", "Data exp. ITP"};
         this.carsTable = new JTable(new NonEditableTableModel(rowData, columnNames));
-
+        this.carsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.carsTable.setAutoCreateRowSorter(true);
         // Populate the cars table
         refreshCarsTable();
     }
@@ -129,7 +130,7 @@ public class ViewCars extends JFrame {
         }
         // Reload the cars in the table
         for (Car car : carMapper.retrieveAllCars()) {
-            model.addRow(car.setDetailsVector());
+            model.addRow(car.getRowData());
         }
         LOGGER.info("-->> Finished refreshing CarsTable. <<--");
     }

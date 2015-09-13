@@ -7,8 +7,6 @@ import org.phantom.notificator.mappers.CarOwnerMapper;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by mihne_000 on 7/6/2015.
@@ -29,28 +27,19 @@ public class SelectCars extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new MainMenu(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        backButton.addActionListener(e -> {
+            new MainMenu(carMapper, carOwnerMapper);
+            setVisible(false);
         });
-        backToSeeCarsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ViewCars(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
+        backToSeeCarsButton.addActionListener(e -> {
+            new ViewCars(carMapper, carOwnerMapper);
+            setVisible(false);
         });
 
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ModifyCar(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
+        nextButton.addActionListener(e -> {
+            new ModifyCar(carMapper, carOwnerMapper);
+            setVisible(false);
         });
     }
 
@@ -75,7 +64,7 @@ public class SelectCars extends JFrame {
         model.addRow(columnNames);
         for(Car car :carMapper.retrieveAllCars())
         {
-            model.addRow(car.setDetailsVector());
+            model.addRow(car.getRowData());
         }
     }
 }
