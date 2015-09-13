@@ -1,5 +1,6 @@
 package org.phantom.notificator.services;
 
+import org.joda.time.LocalDate;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.util.PropertiesRetrievalUtil;
@@ -9,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by Master Victor on 23/06/2015.
@@ -31,6 +30,16 @@ public class EmailSender {
         PASSWORD = PropertiesRetrievalUtil.getProperty("email_password");
     }
 
+    public static void main(String[] args) {
+        EmailSender emailSender = new EmailSender();
+        CarOwner daniel = new CarOwner("D", "P", "0000000000");
+        daniel.setEmail("daniel.patentasu@yahoo.com");
+        Car car = new Car("B 123 WWJ", new LocalDate(), daniel);
+        HashMap<CarOwner, List<Car>> carOwnerToCar = new HashMap<>();
+        carOwnerToCar.put(daniel, Collections.singletonList(car));
+        emailSender.sendEmailTo(carOwnerToCar);
+    }
+
     public void sendEmailTo(Map<CarOwner, List<Car>> ownerToCarsMap) {
         ownerToCarsMap.forEach((carOwner, cars) -> {
             LOGGER.info("--->> Sending email to {} clients <<----", ownerToCarsMap.size());
@@ -43,7 +52,7 @@ public class EmailSender {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("Draga client,").append(DOUBLE_NEW_LINE);
-        stringBuilder.append("Urmatoarelor masini le va expira ITP-ul in curand: ").append(DOUBLE_NEW_LINE);
+        stringBuilder.append("Urmatoarelor masini le va expira ITP-ul/Tahograful in curand: ").append(DOUBLE_NEW_LINE);
 
         for (Car car : cars) {
             stringBuilder.append("- Nr. Inmatriculare: ").append(car.getCarRegistrationNumber()).append(SPACE);
@@ -51,7 +60,9 @@ public class EmailSender {
         }
 
         stringBuilder.append(NEW_LINE);
-        stringBuilder.append("Va asteptam la noi la firma,").append(NEW_LINE);
+        stringBuilder.append("Va asteptam la noi la firma sa efectuati ITP-ul si/sau verificarea TAHOGRAFULUI.").append(NEW_LINE);
+        stringBuilder.append(NEW_LINE);
+        stringBuilder.append("Sa aveti o zi buna,").append(NEW_LINE);
         stringBuilder.append("Vector Truck Management SRL").append(DOUBLE_NEW_LINE);
         stringBuilder.append("-----------------------------------------------").append(DOUBLE_NEW_LINE);
         stringBuilder.append("Str. Ecologiei, Nr. 793D, Comuna Albota, judetul Arges, CP 117030").append(NEW_LINE);

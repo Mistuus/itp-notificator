@@ -53,7 +53,7 @@ public class EmailSenderTest extends AbstractTestEnvironmentSetup {
         mihnea.setEmail(mihneasEmailAddress);
         bunu.setEmail(bunusEmailAddress);
         HashMap<CarOwner, List<Car>> ownerToCarMap = new HashMap<>();
-        ownerToCarMap.put(mihnea, Arrays.asList(mihneasCarWithUpcomingItp, mihneasOtherCarWithUpcomingItp));
+        ownerToCarMap.put(mihnea, Arrays.asList(mihneasCarWithUpcomingItp, mihneasCarWithUpcomingTahograf));
         ownerToCarMap.put(bunu, Collections.singletonList(bunusCarWithUpcomingItp));
 
         // Start sending email

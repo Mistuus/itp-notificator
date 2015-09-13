@@ -34,7 +34,7 @@ public abstract class AbstractTestEnvironmentSetup {
 
     public static Car victorsCarWithoutUpcomingItp;
     public static Car mihneasCarWithUpcomingItp;
-    public static Car mihneasOtherCarWithUpcomingItp;
+    public static Car mihneasCarWithUpcomingTahograf;
     public static Car bunusCarWithUpcomingItp;
     public static Car danielsCar;
 
@@ -64,9 +64,10 @@ public abstract class AbstractTestEnvironmentSetup {
         // Set up cars with upcoming Itp Expiry Date in MORE than daysUntilItpExpires
         victorsCarWithoutUpcomingItp = new Car("B 725 MIH", currentDateForTest.plus(daysToNotifyInAdvance).plus(Days.THREE), victor);
 
-        // Set up cars with upcoming Itp Expiry Date in EXACTLY daysUntilItpExpires
+        // Set up cars with upcoming Itp & Tahograf Expiry Date in EXACTLY daysUntilItpExpires
         mihneasCarWithUpcomingItp = new Car("B 23 BUB", currentDateForTest.plus(daysToNotifyInAdvance), mihnea);
-        mihneasOtherCarWithUpcomingItp = new Car("B 45 MIC", currentDateForTest.plus(daysToNotifyInAdvance), mihnea);
+        mihneasCarWithUpcomingTahograf = new Car("B 45 MIC", currentDateForTest, mihnea);
+        mihneasCarWithUpcomingTahograf.setTahografExpiryDate(currentDateForTest.plus(daysToNotifyInAdvance));
         bunusCarWithUpcomingItp = new Car("AG 88 VEE", currentDateForTest.plus(daysToNotifyInAdvance), bunu);
 
         // Set up cars with upcoming Itp Expiry Date in LESS than daysUntilItpExpires
@@ -74,7 +75,7 @@ public abstract class AbstractTestEnvironmentSetup {
 
         expectedCars = Arrays.asList(victorsCarWithoutUpcomingItp,
                 mihneasCarWithUpcomingItp,
-                mihneasOtherCarWithUpcomingItp,
+                mihneasCarWithUpcomingTahograf,
                 bunusCarWithUpcomingItp,
                 danielsCar);
     }

@@ -43,7 +43,7 @@ public class DailySchedulerTest extends AbstractTestEnvironmentSetup {
         Assert.assertThat(carOwners, CoreMatchers.hasItems(mihnea, bunu));
 
         Collection<List<Car>> listOfClientCars = clientCarMap.values();
-        List<Car> mihneasCars = Arrays.asList(mihneasCarWithUpcomingItp, mihneasOtherCarWithUpcomingItp);
+        List<Car> mihneasCars = Arrays.asList(mihneasCarWithUpcomingItp, mihneasCarWithUpcomingTahograf);
         List<Car> bunusCars = Collections.singletonList(bunusCarWithUpcomingItp);
         Assert.assertThat(listOfClientCars, CoreMatchers.hasItems(mihneasCars, bunusCars));
     }

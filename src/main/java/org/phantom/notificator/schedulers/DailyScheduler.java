@@ -36,17 +36,18 @@ public class DailyScheduler {
 
     /**
      * Returns true if the current date + {@link #daysToNotifyInAdvance}
-     * equals the itpExpiryDate of the car.
-     * This tells us the car owner needs to be notified of the upcoming ITP.
+     * equals the itpExpiryDate OR the tahografExpiryDate of the car.
+     * This tells us the car owner needs to be notified of the upcoming ITP or Tahograf Inspection.
      *
-     * @param car Car to see if we need to notify client of upcoming ITP.
+     * @param car Car to see if we need to notify client of upcoming ITP or Tahograf.
      * @return If the condition is true. False, otherwise.
      */
     public boolean shouldNotifyOwner(Car car) {
         LocalDate itpExpiryDate = car.getItpExpiryDate();
+        LocalDate tahografExpiryDate = car.getTahografExpiryDate();
         LocalDate currentDate = getCurrentDate();
         LocalDate expectedExpiryDate = currentDate.plus(daysToNotifyInAdvance);
-        return expectedExpiryDate.equals(itpExpiryDate);
+        return expectedExpiryDate.equals(itpExpiryDate) || expectedExpiryDate.equals(tahografExpiryDate);
     }
 
     public Map<CarOwner, List<Car>> retrieveClientsToNotifyOfUpcomingItp() {

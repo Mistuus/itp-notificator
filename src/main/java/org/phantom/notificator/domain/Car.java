@@ -29,6 +29,10 @@ public class Car {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate itpExpiryDate;
 
+    @Column(name = "TAHOGRAF_EXPIRY_DATE")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate tahografExpiryDate;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade =
             {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
@@ -101,5 +105,13 @@ public class Car {
 
         Car other = (Car) obj;
         return this.getCarRegistrationNumber().equals(other.getCarRegistrationNumber());
+    }
+
+    public LocalDate getTahografExpiryDate() {
+        return tahografExpiryDate;
+    }
+
+    public void setTahografExpiryDate(LocalDate tahografExpiryDate) {
+        this.tahografExpiryDate = tahografExpiryDate;
     }
 }
