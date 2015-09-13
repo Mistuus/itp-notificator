@@ -16,6 +16,9 @@ import java.util.stream.Stream;
 /**
  * Created by Master Victor on 23/06/2015.
  */
+// TODO: vic: How to redirect LOGs to file??
+// TODO: vic: Backup DB
+// TODO: vic: How to make it run daily
 public class DailyScheduler {
 
     private final Days daysToNotifyInAdvance;

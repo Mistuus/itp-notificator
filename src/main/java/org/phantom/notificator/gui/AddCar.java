@@ -129,6 +129,7 @@ public class AddCar extends JFrame {
         } else {
             JOptionPane.showMessageDialog(panel,
                     "Masina cu numarul " + carRegistrationNumber + " NU a fost adaugata in sistem.\n" +
+                            "Ati verificat daca masina exista deja in sistem??\n" +
                             "Verifica log-urile pentru mai multe detalii.",
                     "Adaugare nereusita!!",
                     JOptionPane.ERROR_MESSAGE);
