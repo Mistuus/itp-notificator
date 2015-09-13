@@ -15,11 +15,16 @@ import java.awt.*;
  * Created by mihne_000 on 6/30/2015.
  */
 @SuppressWarnings("DefaultFileTemplate")
+// TODO: mihnea: Add label for: Total Cars with Upcoming ITP & Total cars with Upcoming Tahograf
+// TODO: mihnea: Change the title of this page to something better (e.g. Vizualizare Masini Vector Truck)
+// TODO: mihnea: Add column "Expirare Tahoraf")
 public class ViewCars extends JFrame {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ViewCars.class);
     private static final Dimension PREFERRED_DIMENSION = new Dimension(500, 500);
     private static final String EMPTY_STRING = "";
+    private final CarOwnerMapper carOwnerMapper;
+    private final CarMapper carMapper;
     private JTable carsTable;
     private JButton addButton;
     private JButton modifyButton;
@@ -27,8 +32,6 @@ public class ViewCars extends JFrame {
     private JLabel windowTitle;
     private JButton backToMainMenuButton;
     private JButton removeButton;
-    private final CarOwnerMapper carOwnerMapper;
-    private final CarMapper carMapper;
     private Car selectedCar;
     private CarOwner carOwner;
 

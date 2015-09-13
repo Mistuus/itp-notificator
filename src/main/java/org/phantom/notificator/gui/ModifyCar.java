@@ -9,6 +9,7 @@ import java.awt.*;
 /**
  * Created by mihne_000 on 7/6/2015.
  */
+//TODO: Add column for "Expirare Tahograf"
 public class ModifyCar extends JFrame {
     private JButton backToMainMenuButton;
     private JCheckBox forAllCarsCheckBox;
@@ -47,7 +48,6 @@ public class ModifyCar extends JFrame {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         Object rowData[][]=new Object[1][5];
         Object columnNames[]={"First Name","Last Name","Company Name","Email","Telephone No"};
         table1=new JTable(rowData,columnNames);
