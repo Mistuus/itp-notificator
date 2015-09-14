@@ -34,6 +34,7 @@ public class AddCar extends JFrame {
     private JButton backButton;
     private JButton adaugaMasinaButton;
     private JLabel detaliiClientLabel;
+    private JTextField tahografExpiryDate;
 
     public AddCar(CarMapper carMapper, CarOwnerMapper carOwnerMapper) {
         super("Add Cars");
