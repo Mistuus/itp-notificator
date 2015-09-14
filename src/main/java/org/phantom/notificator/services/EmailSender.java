@@ -35,8 +35,9 @@ public class EmailSender {
         CarOwner daniel = new CarOwner("D", "P", "0000000000");
         daniel.setEmail("daniel.patentasu@yahoo.com");
         Car car = new Car("B 123 WWJ", new LocalDate(), daniel);
+        Car car1 = new Car("B 725 MIH", new LocalDate(), daniel);
         HashMap<CarOwner, List<Car>> carOwnerToCar = new HashMap<>();
-        carOwnerToCar.put(daniel, Collections.singletonList(car));
+        carOwnerToCar.put(daniel, Arrays.asList(car, car1));
         emailSender.sendEmailTo(carOwnerToCar);
     }
 
@@ -52,7 +53,7 @@ public class EmailSender {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("Draga client,").append(DOUBLE_NEW_LINE);
-        stringBuilder.append("Urmatoarelor masini le va expira ITP-ul/Tahograful in curand: ").append(DOUBLE_NEW_LINE);
+        stringBuilder.append("Urmatoarelor vehicule le va expira ITP-ul/verificarea tahografului in curand: ").append(DOUBLE_NEW_LINE);
 
         for (Car car : cars) {
             stringBuilder.append("- Nr. Inmatriculare: ").append(car.getCarRegistrationNumber()).append(SPACE);
@@ -60,7 +61,7 @@ public class EmailSender {
         }
 
         stringBuilder.append(NEW_LINE);
-        stringBuilder.append("Va asteptam la noi la firma sa efectuati ITP-ul si/sau verificarea TAHOGRAFULUI.").append(NEW_LINE);
+        stringBuilder.append("Va asteptam la noi la firma pentru efectuarea ITP-ului/verificare tahograf.").append(NEW_LINE);
         stringBuilder.append(NEW_LINE);
         stringBuilder.append("Sa aveti o zi buna,").append(NEW_LINE);
         stringBuilder.append("Vector Truck Management SRL").append(DOUBLE_NEW_LINE);
