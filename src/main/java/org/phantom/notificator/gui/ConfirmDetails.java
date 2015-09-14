@@ -67,7 +67,8 @@ public class ConfirmDetails extends JFrame {
             LocalDate itpDate;
             LocalDate tahografDate;
             try {
-                itpDate = LocalDate.parse(newCarDetailsTable.getModel().getValueAt(0, 2).toString());
+                Object itpExpiryDateFromTable = newCarDetailsTable.getModel().getValueAt(0, 2);
+                itpDate = itpExpiryDateFromTable == null ? null : LocalDate.parse(itpExpiryDateFromTable.toString());
             } catch (IllegalArgumentException exception) {
                 JOptionPane.showMessageDialog(panel, "Data Expirare ITP este incorecta!\n" +
                                 "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
@@ -76,9 +77,10 @@ public class ConfirmDetails extends JFrame {
                 return;
             }
             try {
-                tahografDate = LocalDate.parse(newCarDetailsTable.getModel().getValueAt(0, 1).toString());
+                Object tahografExpiryDateObject = newCarDetailsTable.getModel().getValueAt(0, 1);
+                tahografDate = tahografExpiryDateObject == null ? null : LocalDate.parse(tahografExpiryDateObject.toString());
             } catch (IllegalArgumentException exception) {
-                JOptionPane.showMessageDialog(panel, "Data Expirare ITP este incorecta!\n" +
+                JOptionPane.showMessageDialog(panel, "Data Expirare Tahograf este incorecta!\n" +
                                 "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
                         "Data Expirare ITP incorecta",
                         JOptionPane.ERROR_MESSAGE);
@@ -137,6 +139,7 @@ public class ConfirmDetails extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
     private void createUIComponents() {
         panel = new JPanel(new BorderLayout());
 
