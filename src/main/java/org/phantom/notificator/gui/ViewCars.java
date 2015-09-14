@@ -51,12 +51,11 @@ public class ViewCars extends JFrame {
             @Override
             public void run() {
                 totalItpCars.setText("Masini cu ITP:" + (carMapper.retrieveAllCars().size()));
-                totalTahografCars.setText("Masini cu Tahograf:");
+                totalTahografCars.setText("Masini cu Tahograf:" + getTotalNumberOfTahografCars());
             }
         });
 
         add(panel);
-
         setUpButtonListeners();
         setPreferredSize(PREFERRED_DIMENSION);
         pack();
@@ -180,6 +179,16 @@ public class ViewCars extends JFrame {
         public boolean isCellEditable(int rowIndex, int columnIndex) {
             return false;
         }
+    }
+
+    private int getTotalNumberOfTahografCars() {
+        int nr = 0;
+        for (Car car : carMapper.retrieveAllCars()) {
+            if (car.getTahografExpiryDate() != null) {
+                nr++;
+            }
+        }
+        return nr;
     }
 }
 
