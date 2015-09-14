@@ -4,8 +4,11 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
+import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.services.EmailSender;
-import org.phantom.notificator.services.SmsSender;
+import org.phantom.notificator.util.HibernateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -21,12 +24,22 @@ import java.util.stream.Stream;
 // TODO: vic: How to make it run daily
 public class DailyScheduler {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DailyScheduler.class);
     private final Days daysToNotifyInAdvance;
     private List<Car> cars;
 
     public DailyScheduler(List<Car> cars, Days daysToNotifyInAdvance) {
         this.cars = cars;
         this.daysToNotifyInAdvance = daysToNotifyInAdvance;
+    }
+
+    public static void main(String[] args) {
+        LOGGER.info("---->> Daily Scheduler started... <<<---");
+        CarMapper carMapper = new CarMapper(HibernateUtil.getSessionFactory());
+        DailyScheduler dailyScheduler = new DailyScheduler(carMapper.retrieveAllCars(), Days.FIVE);
+        dailyScheduler.notifyClientsOfUpcomingItp();
+        HibernateUtil.getSessionFactory().close();
+        LOGGER.info("--->>> Daily Scheduler finished. <<<---");
     }
 
     public List<Car> getCars() {
@@ -68,12 +81,15 @@ public class DailyScheduler {
     }
 
     public void notifyClientsOfUpcomingItp() {
+        LOGGER.info("--->>> Preparing to notify clients ... <<<---");
         Map<CarOwner, List<Car>> ownerToCarsMap = retrieveClientsToNotifyOfUpcomingItp();
+        LOGGER.info("--->>> Clients to notify: " + ownerToCarsMap.size() + " <<<---");
 
-        SmsSender smsSender = new SmsSender();
         EmailSender emailSender = new EmailSender();
-
-        smsSender.sendSmsTo(ownerToCarsMap);
         emailSender.sendEmailTo(ownerToCarsMap);
+//        SmsSender smsSender = new SmsSender();
+//        smsSender.sendSmsTo(ownerToCarsMap);
+
+        LOGGER.info("--->>> Finished notifying clients by email/SMS. <<<---");
     }
 }

@@ -42,10 +42,20 @@ public class EmailSender {
     }
 
     public void sendEmailTo(Map<CarOwner, List<Car>> ownerToCarsMap) {
+        LOGGER.info("--->> Sending email to {} clients <<----", ownerToCarsMap.size());
+
         ownerToCarsMap.forEach((carOwner, cars) -> {
-            LOGGER.info("--->> Sending email to {} clients <<----", ownerToCarsMap.size());
-            String messageForClient = createEmailBodyFrom(cars);
-            sendEmailTo(carOwner.getEmail(), messageForClient);
+
+            String clientEmailAddress = carOwner.getEmail();
+            if (clientEmailAddress != null) {
+                LOGGER.info("--->> Sending email to client = {}, emailAddress = {} <<----", carOwner.getLastName(), clientEmailAddress);
+                String messageForClient = createEmailBodyFrom(cars);
+                sendEmailTo(clientEmailAddress, messageForClient);
+            } else {
+                LOGGER.info("--->> Could not send email to " + carOwner.getFirstName() + ", " + carOwner.getLastName()
+                        + " as there is no email address <<----");
+            }
+
         });
     }
 
