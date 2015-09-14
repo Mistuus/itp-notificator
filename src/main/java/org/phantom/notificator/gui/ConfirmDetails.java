@@ -65,8 +65,18 @@ public class ConfirmDetails extends JFrame {
             String companyName = (String) newClientDetailsTable.getModel().getValueAt(0, 2);
             String email = (String) newClientDetailsTable.getModel().getValueAt(0, 3);
             LocalDate itpDate;
+            LocalDate tahografDate;
             try {
                 itpDate = LocalDate.parse(newCarDetailsTable.getModel().getValueAt(0, 2).toString());
+            } catch (IllegalArgumentException exception) {
+                JOptionPane.showMessageDialog(panel, "Data Expirare ITP este incorecta!\n" +
+                                "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
+                        "Data Expirare ITP incorecta",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                tahografDate = LocalDate.parse(newCarDetailsTable.getModel().getValueAt(0, 1).toString());
             } catch (IllegalArgumentException exception) {
                 JOptionPane.showMessageDialog(panel, "Data Expirare ITP este incorecta!\n" +
                                 "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
@@ -83,6 +93,8 @@ public class ConfirmDetails extends JFrame {
                 owner.setEmail(email);
             }
             car.setItpExpiryDate(itpDate);
+            car.setTahografExpiryDate(tahografDate);
+
             Set<ConstraintViolation<CarOwner>> carOwnerValidationErrors = carOwnerMapper.getValidationErrorSet(owner);
             Set<ConstraintViolation<Car>> carValidationErrors = carMapper.getValidationErrorSet(car);
             if (carOwnerValidationErrors.isEmpty() && carValidationErrors.isEmpty()) {
@@ -139,7 +151,7 @@ public class ConfirmDetails extends JFrame {
         EditableClientDetailsModel modifiableClientDetailsModel = new EditableClientDetailsModel(rowDataWithInitialClientDetails, clientDetailsColumnNames);
         newClientDetailsTable = new JTable(modifiableClientDetailsModel);
 
-        Object rowDataForInitialCarDetails[][] = {{car.getCarRegistrationNumber(), "", car.getItpExpiryDate()}};
+        Object rowDataForInitialCarDetails[][] = {{car.getCarRegistrationNumber(), car.getTahografExpiryDate(), car.getItpExpiryDate()}};
         Object carDetailsColumnNames[] = {"Nr. Inmatriculare", "Data exp. tahograf", "Data exp. ITP"};
 
         // Create the non-editable table for displaying the old CAR values
