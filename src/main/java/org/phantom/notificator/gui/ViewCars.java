@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by mihne_000 on 6/30/2015.
@@ -25,6 +23,8 @@ public class ViewCars extends JFrame {
     public static final Logger LOGGER = LoggerFactory.getLogger(ViewCars.class);
     private static final Dimension PREFERRED_DIMENSION = new Dimension(1000, 500);
     private static final String EMPTY_STRING = "";
+    private final CarOwnerMapper carOwnerMapper;
+    private final CarMapper carMapper;
     private JTable carsTable;
     private JButton addButton;
     private JButton modifyButton;
@@ -38,8 +38,6 @@ public class ViewCars extends JFrame {
     private JLabel totalItpCars;
     private JLabel totalTahografCars;
     private JFormattedTextField numarTotalMasiniFormattedTextField;
-    private final CarOwnerMapper carOwnerMapper;
-    private final CarMapper carMapper;
     private Car selectedCar;
     private CarOwner carOwner;
 
@@ -47,14 +45,6 @@ public class ViewCars extends JFrame {
         super("Vizualizare Masini Vector Truck");
         this.carMapper = carMapper;
         this.carOwnerMapper = carOwnerMapper;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                totalItpCars.setText("Masini cu ITP:" + (carMapper.retrieveAllCars().size()));
-                totalTahografCars.setText("Masini cu Tahograf:" + getTotalNumberOfTahografCars());
-            }
-        });
-
         add(panel);
         setUpButtonListeners();
         setPreferredSize(PREFERRED_DIMENSION);
@@ -105,18 +95,15 @@ public class ViewCars extends JFrame {
                 setVisible(false);
             }
         });
-        cautaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String searchText = searchField.getText();
-                NonEditableTableModel model = (NonEditableTableModel) carsTable.getModel();
-                while (model.getRowCount() > 0) {
-                    model.removeRow(0);
-                }
-                for (Car car : carMapper.retrieveAllCars()) {
-                    if (car.toString().toLowerCase().contains(searchText.toLowerCase())) {
-                        model.addRow(car.getRowData());
-                    }
+        cautaButton.addActionListener(e -> {
+            String searchText = searchField.getText();
+            NonEditableTableModel model = (NonEditableTableModel) carsTable.getModel();
+            while (model.getRowCount() > 0) {
+                model.removeRow(0);
+            }
+            for (Car car : carMapper.retrieveAllCars()) {
+                if (car.toString().toLowerCase().contains(searchText.toLowerCase())) {
+                    model.addRow(car.getRowData());
                 }
             }
         });
@@ -144,8 +131,6 @@ public class ViewCars extends JFrame {
     private void createUIComponents() {
         // Configure the panel to display the cars table
         panel = new JPanel();
-        totalItpCars = new JLabel();
-        totalTahografCars = new JLabel();
 
         // Create the JTable to display the cars
         Object rowData[][] = new Object[0][6];
@@ -164,10 +149,20 @@ public class ViewCars extends JFrame {
         while (model.getRowCount() > 0) {
             model.removeRow(0);
         }
-        // Reload the cars in the table
-        for (Car car : carMapper.retrieveAllCars()) {
+        // Reload the cars in the table and count the number of cars with tahograf
+        java.util.List<Car> allCars = carMapper.retrieveAllCars();
+        final int[] totalCarsWithUpcomingTahograf = new int[1];
+        for (Car car : allCars) {
             model.addRow(car.getRowData());
+            if (car.getTahografExpiryDate() != null) {
+                totalCarsWithUpcomingTahograf[0]++;
+            }
         }
+        // Set some statistics in labels
+        SwingUtilities.invokeLater(() -> {
+            totalItpCars.setText("Masini cu ITP: " + (allCars.size()));
+            totalTahografCars.setText("Masini cu Tahograf: " + totalCarsWithUpcomingTahograf[0]);
+        });
         LOGGER.info("-->> Finished refreshing CarsTable. <<--");
     }
 
@@ -179,16 +174,6 @@ public class ViewCars extends JFrame {
         public boolean isCellEditable(int rowIndex, int columnIndex) {
             return false;
         }
-    }
-
-    private int getTotalNumberOfTahografCars() {
-        int nr = 0;
-        for (Car car : carMapper.retrieveAllCars()) {
-            if (car.getTahografExpiryDate() != null) {
-                nr++;
-            }
-        }
-        return nr;
     }
 }
 
