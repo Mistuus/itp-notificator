@@ -27,14 +27,6 @@
           <text value="- ITP Notificator -"/>
         </properties>
       </component>
-      <component id="1265b" class="javax.swing.JButton" binding="viewCarsButton1" custom-create="true" default-binding="true">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Vezi Masini"/>
-        </properties>
-      </component>
       <component id="d3f44" class="javax.swing.JButton" binding="modifyButton" custom-create="true" default-binding="true">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -52,6 +44,14 @@
           <alignmentX value="1.0"/>
           <alignmentY value="1.0"/>
           <text value="Adauga Masina"/>
+        </properties>
+      </component>
+      <component id="1265b" class="javax.swing.JButton" binding="viewCarsButton1" custom-create="true" default-binding="true">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Vizualizare Masini Vector Truck"/>
         </properties>
       </component>
     </children>
