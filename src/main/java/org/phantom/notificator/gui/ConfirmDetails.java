@@ -66,7 +66,7 @@ public class ConfirmDetails extends JFrame {
             String email = (String) newClientDetailsTable.getModel().getValueAt(0, 3);
             LocalDate itpDate;
             try {
-                itpDate = LocalDate.parse(newCarDetailsTable.getModel().getValueAt(0, 1).toString());
+                itpDate = LocalDate.parse(newCarDetailsTable.getModel().getValueAt(0, 2).toString());
             } catch (IllegalArgumentException exception) {
                 JOptionPane.showMessageDialog(panel, "Data Expirare ITP este incorecta!\n" +
                                 "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
@@ -139,8 +139,8 @@ public class ConfirmDetails extends JFrame {
         EditableClientDetailsModel modifiableClientDetailsModel = new EditableClientDetailsModel(rowDataWithInitialClientDetails, clientDetailsColumnNames);
         newClientDetailsTable = new JTable(modifiableClientDetailsModel);
 
-        Object rowDataForInitialCarDetails[][] = {{car.getCarRegistrationNumber(), car.getItpExpiryDate()}};
-        Object carDetailsColumnNames[] = {"Nr. Inmatriculare", "Data exp. ITP"};
+        Object rowDataForInitialCarDetails[][] = {{car.getCarRegistrationNumber(), "", car.getItpExpiryDate()}};
+        Object carDetailsColumnNames[] = {"Nr. Inmatriculare", "Data exp. tahograf", "Data exp. ITP"};
 
         // Create the non-editable table for displaying the old CAR values
         NonEditableTableModel oldCarDetailsModel = new NonEditableTableModel(rowDataForInitialCarDetails, carDetailsColumnNames);
@@ -176,6 +176,8 @@ public class ConfirmDetails extends JFrame {
                 case 0:
                     return false;
                 case 1:
+                    return true;
+                case 2:
                     return true;
                 default:
                     return false;
