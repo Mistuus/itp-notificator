@@ -34,7 +34,7 @@ public class AddCar extends JFrame {
     private JButton backButton;
     private JButton adaugaMasinaButton;
     private JLabel detaliiClientLabel;
-    private JTextField tahografExpiryDate;
+    private JTextField tahografExpiryDateTextField;
 
     public AddCar(CarMapper carMapper, CarOwnerMapper carOwnerMapper) {
         super("Add Cars");
@@ -74,6 +74,16 @@ public class AddCar extends JFrame {
             return;
         }
 
+        LocalDate tahografExpiryDate;
+        try {
+            tahografExpiryDate = LocalDate.parse(tahografExpiryDateTextField.getText());
+        } catch (IllegalArgumentException exception) {
+            JOptionPane.showMessageDialog(panel, "Data Expirare Tahograf este incorecta!\n" +
+                            "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
+                    "Data Expirare Tahograf incorecta",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         // Get the other text field values
         String carRegistrationNumber = carRegistrationNumberTextField.getText().toUpperCase();
         String firstName = firstNameTextField.getText();
@@ -91,7 +101,7 @@ public class AddCar extends JFrame {
             owner.setCompanyName(companyName);
         }
         Car carToAdd = new Car(carRegistrationNumber, itpExpiryDate, owner);
-
+        carToAdd.setTahografExpiryDate(tahografExpiryDate);
         validateAndInsert(owner, carToAdd);
     }
 
