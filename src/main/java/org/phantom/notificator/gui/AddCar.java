@@ -14,9 +14,6 @@ import java.util.Set;
 /**
  * Created by mihne_000 on 6/30/2015.
  */
-// TODO: mihnea: Show which fields are compulsory!! (e.g. put an "*" next to them -e.g. Nume* -
-// TODO: mihnea: also explain somewhere in the corner what the "*" means)
-// TODO: mihnea: Add feature for inserting "Data expirare Tahograf")
 public class AddCar extends JFrame {
     private static final String NEW_LINE = "\n";
     private static final Dimension PREFERRED_SIZE = new Dimension(500, 500);

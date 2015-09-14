@@ -15,9 +15,6 @@ import java.awt.*;
  * Created by mihne_000 on 6/30/2015.
  */
 @SuppressWarnings("DefaultFileTemplate")
-// TODO: mihnea: Add label for: Total Cars with Upcoming ITP & Total cars with Upcoming Tahograf
-// TODO: mihnea: Change the title of this page to something better (e.g. Vizualizare Masini Vector Truck)
-// TODO: mihnea: Add column "Expirare Tahoraf")
 public class ViewCars extends JFrame {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ViewCars.class);
@@ -90,8 +87,7 @@ public class ViewCars extends JFrame {
             } else {
                 selectedCar = carMapper.retrieveCar(carRegistrationNumber);
                 carOwner = selectedCar.getCarOwner();
-                // TODO: pass to ConfirmDetails only the selected car (from it, we can get the owner)
-                new ConfirmDetails(carMapper, carOwnerMapper, carOwner, selectedCar);
+                new ConfirmDetails(carMapper, carOwnerMapper, selectedCar, carOwner);
                 setVisible(false);
             }
         });
@@ -113,9 +109,7 @@ public class ViewCars extends JFrame {
             new MainMenu(carMapper, carOwnerMapper);
             setVisible(false);
         });
-        refreshButton.addActionListener(e -> {
-            refreshCarsTable();
-        });
+        refreshButton.addActionListener(e -> refreshCarsTable());
     }
 
     private String getSelectedCarRegistrationNumber() {

@@ -9,7 +9,6 @@ import java.awt.*;
 /**
  * Created by mihne_000 on 7/6/2015.
  */
-//TODO: Add column for "Expirare Tahograf"
 public class ModifyCar extends JFrame {
     private JButton backToMainMenuButton;
     private JCheckBox forAllCarsCheckBox;

@@ -35,7 +35,7 @@ public class ConfirmDetails extends JFrame {
     private CarOwner owner;
     private Car car;
 
-    public ConfirmDetails(CarMapper carMapper, CarOwnerMapper carOwnerMapper, CarOwner owner, Car car) {
+    public ConfirmDetails(CarMapper carMapper, CarOwnerMapper carOwnerMapper, Car car, CarOwner owner) {
         super("Confirm Details");
         this.carMapper = carMapper;
         this.carOwnerMapper = carOwnerMapper;

@@ -44,7 +44,6 @@ public class SelectCars extends JFrame {
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         panel1=new JPanel();
         panel1.setPreferredSize(new Dimension(500,500));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
