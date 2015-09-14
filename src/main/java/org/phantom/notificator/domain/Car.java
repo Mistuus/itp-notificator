@@ -66,7 +66,7 @@ public class Car {
     }
 
     public Object[] getRowData() {
-        return new Object[]{this.getCarOwner().getLastName() + " " + this.getCarOwner().getFirstName(), this.getCarRegistrationNumber(), this.getCarOwner().getTelephoneNumber(), this.getCarOwner().getCompanyName(), this.getCarOwner().getEmail(), this.getItpExpiryDate()};
+        return new Object[]{this.getCarOwner().getLastName() + " " + this.getCarOwner().getFirstName(), this.getCarRegistrationNumber(), this.getCarOwner().getTelephoneNumber(), this.getCarOwner().getCompanyName(), this.getCarOwner().getEmail(), this.getTahografExpiryDate(), this.getItpExpiryDate()};
     }
 
     private void setCarRegistrationNumber(String carRegistrationNumber) {
