@@ -25,8 +25,6 @@ public class ViewCars extends JFrame {
     public static final Logger LOGGER = LoggerFactory.getLogger(ViewCars.class);
     private static final Dimension PREFERRED_DIMENSION = new Dimension(1000, 500);
     private static final String EMPTY_STRING = "";
-    private final CarOwnerMapper carOwnerMapper;
-    private final CarMapper carMapper;
     private JTable carsTable;
     private JButton addButton;
     private JButton modifyButton;
@@ -37,16 +35,28 @@ public class ViewCars extends JFrame {
     private JTextField searchField;
     private JButton cautaButton;
     private JButton refreshButton;
+    private JLabel totalItpCars;
+    private JLabel totalTahografCars;
+    private JFormattedTextField numarTotalMasiniFormattedTextField;
     private final CarOwnerMapper carOwnerMapper;
     private final CarMapper carMapper;
     private Car selectedCar;
     private CarOwner carOwner;
 
     public ViewCars(CarMapper carMapper, CarOwnerMapper carOwnerMapper) {
-        super("Tabel Masini");
+        super("Vizualizare Masini Vector Truck");
         this.carMapper = carMapper;
         this.carOwnerMapper = carOwnerMapper;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                totalItpCars.setText("Masini cu ITP:" + (carMapper.retrieveAllCars().size()));
+                totalTahografCars.setText("Masini cu Tahograf:");
+            }
+        });
+
         add(panel);
+
         setUpButtonListeners();
         setPreferredSize(PREFERRED_DIMENSION);
         pack();
@@ -73,8 +83,8 @@ public class ViewCars extends JFrame {
                         JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(panel, "Masina nu a fost stearsa din sistem!" +
-                        "\nAti selectat masina pana sa apasati butonul Sterge?" +
-                        "\n(Verifica log-urile pentru mai multe detalii.)", "Stergere incompleta!!",
+                                "\nAti selectat masina pana sa apasati butonul Sterge?" +
+                                "\n(Verifica log-urile pentru mai multe detalii.)", "Stergere incompleta!!",
                         JOptionPane.ERROR_MESSAGE);
             }
             refreshCarsTable();
@@ -135,10 +145,12 @@ public class ViewCars extends JFrame {
     private void createUIComponents() {
         // Configure the panel to display the cars table
         panel = new JPanel();
+        totalItpCars = new JLabel();
+        totalTahografCars = new JLabel();
 
         // Create the JTable to display the cars
-        Object rowData[][] = new Object[0][5];
-        Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Firma", "Email", "Data exp. ITP"};
+        Object rowData[][] = new Object[0][6];
+        Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Firma", "Email", "Data exp. tahograf", "Data exp. ITP"};
         this.carsTable = new JTable(new NonEditableTableModel(rowData, columnNames));
         this.carsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.carsTable.setAutoCreateRowSorter(true);
