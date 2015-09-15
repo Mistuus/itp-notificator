@@ -39,6 +39,9 @@ public class MockedHibernateUtil {
             configuration.getProperties().setProperty("hibernate.connection.password", PropertiesRetrievalUtil.getProperty("test_db_password"));
             configuration.getProperties().setProperty("hibernate.connection.url", URL_PREFIX + getDbFilePath() + URL_SUFFIX);
             configuration.configure();
+            // The following property overrides the existing hibernate.hbm2ddl.auto=update to hibernate.hbm2ddl.auto=create.
+            // Consequently, this will drop and recreate the test DB after each use.
+            configuration.getProperties().setProperty("hibernate.hbm2ddl.auto", "create");
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();

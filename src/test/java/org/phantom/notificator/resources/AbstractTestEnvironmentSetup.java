@@ -104,7 +104,7 @@ public abstract class AbstractTestEnvironmentSetup {
 
         } catch (Exception e) {
 
-            LOGGER.error("---->>>> Error occurred when adding clients !! Rolling back. {}<<<<----" );
+            LOGGER.error("---->>>> Error occurred when adding clients !! Rolling back. <<<<----");
             e.printStackTrace();
             if (txt != null) {
                 txt.rollback();
