@@ -33,10 +33,6 @@
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.h2.Driver</property>
 
-        <!-- todo: determine if we should define the file in here or look it up dynamically -->
-        <!-- todo: add the following once ready for prod release: DB_CLOSE_DELAY=10;-->
-        <!--<property name="connection.url">jdbc:h2:file:E:\Projects\itp-notificator\src\main\resources\vectorDB;IFEXISTS=TRUE;</property>-->
-
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
 
