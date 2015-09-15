@@ -1,3 +1,5 @@
 .idea/
 target/*
-config.properties
+src/main/resources/config.properties
+logs/*
+itp-notificator.iml
