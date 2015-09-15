@@ -19,24 +19,21 @@ import java.util.stream.Stream;
 /**
  * Created by Master Victor on 23/06/2015.
  */
-// TODO: vic: How to redirect LOGs to file??
 // TODO: vic: Backup DB
-// TODO: vic: How to make it run daily
 public class DailyScheduler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DailyScheduler.class);
-    private final Days daysToNotifyInAdvance;
+    private static final Days DAYS_TO_NOTIFY_IN_ADVANCE = Days.SIX;
     private List<Car> cars;
 
-    public DailyScheduler(List<Car> cars, Days daysToNotifyInAdvance) {
+    public DailyScheduler(List<Car> cars) {
         this.cars = cars;
-        this.daysToNotifyInAdvance = daysToNotifyInAdvance;
     }
 
     public static void main(String[] args) {
         LOGGER.info("---->> Daily Scheduler started... <<<---");
         CarMapper carMapper = new CarMapper(HibernateUtil.getSessionFactory());
-        DailyScheduler dailyScheduler = new DailyScheduler(carMapper.retrieveAllCars(), Days.FIVE);
+        DailyScheduler dailyScheduler = new DailyScheduler(carMapper.retrieveAllCars());
         dailyScheduler.notifyClientsOfUpcomingItp();
         HibernateUtil.getSessionFactory().close();
         LOGGER.info("--->>> Daily Scheduler finished. <<<---");
@@ -51,7 +48,7 @@ public class DailyScheduler {
     }
 
     /**
-     * Returns true if the current date + {@link #daysToNotifyInAdvance}
+     * Returns true if the current date + {@link #DAYS_TO_NOTIFY_IN_ADVANCE}
      * equals the itpExpiryDate OR the tahografExpiryDate of the car.
      * This tells us the car owner needs to be notified of the upcoming ITP or Tahograf Inspection.
      *
@@ -62,7 +59,7 @@ public class DailyScheduler {
         LocalDate itpExpiryDate = car.getItpExpiryDate();
         LocalDate tahografExpiryDate = car.getTahografExpiryDate();
         LocalDate currentDate = getCurrentDate();
-        LocalDate expectedExpiryDate = currentDate.plus(daysToNotifyInAdvance);
+        LocalDate expectedExpiryDate = currentDate.plus(DAYS_TO_NOTIFY_IN_ADVANCE);
         return expectedExpiryDate.equals(itpExpiryDate) || expectedExpiryDate.equals(tahografExpiryDate);
     }
 
