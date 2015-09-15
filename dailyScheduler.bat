@@ -1,0 +1,3 @@
+ECHO Incepem sa trimitem Email/SMS clientilor Vector Truck Management...
+cmd /k mvn -e compile exec:java -Dexec.mainClass="org.phantom.notificator.schedulers.DailyScheduler"
+ECHO Programul a terminat de trimis mesaje clientilor!
