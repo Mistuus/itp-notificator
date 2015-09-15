@@ -44,7 +44,7 @@ public abstract class AbstractTestEnvironmentSetup {
 
     public static void setUpCarsAndOwnersWithoutPersistingToDb() {
         LOGGER.info("---->>>> SETTING UP TEST ENVIRONMENT (No DB Setup)<<<<----");
-        daysToNotifyInAdvance = Days.FIVE;
+        daysToNotifyInAdvance = DailyScheduler.DAYS_TO_NOTIFY_IN_ADVANCE;
         currentDateForTest = new LocalDate(2015, 6, 29);
 
         setUpCarOwners();
@@ -53,7 +53,7 @@ public abstract class AbstractTestEnvironmentSetup {
         LOGGER.info("---->>>> Cars Configured!! <<<<----");
 
         // Create a mock of DailyScheduler to return a predefined date.
-        spyDailyScheduler = spy(new DailyScheduler(expectedCars, daysToNotifyInAdvance));
+        spyDailyScheduler = spy(new DailyScheduler(expectedCars));
         doReturn(currentDateForTest).when(spyDailyScheduler).getCurrentDate();
         LOGGER.info("---->>>> Itp Notificator Mocked!! <<<<----");
 

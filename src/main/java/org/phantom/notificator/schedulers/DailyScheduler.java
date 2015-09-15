@@ -22,8 +22,8 @@ import java.util.stream.Stream;
 // TODO: vic: Backup DB
 public class DailyScheduler {
 
+    public static final Days DAYS_TO_NOTIFY_IN_ADVANCE = Days.SIX;
     private static final Logger LOGGER = LoggerFactory.getLogger(DailyScheduler.class);
-    private static final Days DAYS_TO_NOTIFY_IN_ADVANCE = Days.SIX;
     private List<Car> cars;
 
     public DailyScheduler(List<Car> cars) {
