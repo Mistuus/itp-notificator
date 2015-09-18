@@ -5,6 +5,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.phantom.notificator.Constants;
+import org.phantom.notificator.domain.Car;
+import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.util.PropertiesRetrievalUtil;
 
 import java.io.File;
@@ -39,6 +41,8 @@ public class MockedHibernateUtil {
             // The following property overrides the existing hibernate.hbm2ddl.auto=update to hibernate.hbm2ddl.auto=create.
             // Consequently, this will drop and recreate the test DB after each use.
             configuration.getProperties().setProperty("hibernate.hbm2ddl.auto", "create");
+            configuration.addAnnotatedClass(CarOwner.class);
+            configuration.addAnnotatedClass(Car.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();

@@ -34,7 +34,13 @@
         <property name="connection.driver_class">org.h2.Driver</property>
 
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">1</property>
+        <!--<property name="connection.pool_size">1</property>-->
+        <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
 
         <!-- Displays the hibernate generated SQL in the LOGS-->
         <property name="hibernate.show_sql">true</property>
@@ -53,8 +59,8 @@
         <property name="hbm2ddl.auto">update</property>
 
         <!-- Names the annotated entity class -->
-        <mapping class="org.phantom.notificator.domain.Car"/>
         <mapping class="org.phantom.notificator.domain.CarOwner"/>
+        <mapping class="org.phantom.notificator.domain.Car"/>
 
     </session-factory>
 

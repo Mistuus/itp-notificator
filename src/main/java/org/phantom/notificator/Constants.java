@@ -26,7 +26,7 @@ public class Constants {
 
     // Define common strings needed by to construct the DB arguments for H2
     public static final String URL_PREFIX = "jdbc:h2:file:";
-    public static final String URL_SUFFIX = ";IFEXISTS=TRUE;DB_CLOSE_DELAY=10;";
+    public static final String URL_SUFFIX = ";IFEXISTS=TRUE;";
 
     // GUI constants
     public static final Dimension PREFERRED_SIZE = new Dimension(500, 500);
