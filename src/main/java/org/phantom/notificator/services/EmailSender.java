@@ -20,7 +20,7 @@ public class EmailSender {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
     public static String EMAIL_SUBJECT = "Vector Truck Management - Va expira ITP-ul";
-    private static String USERNAME;
+    protected static String USERNAME;
     private static String PASSWORD;
 
     public EmailSender() {
