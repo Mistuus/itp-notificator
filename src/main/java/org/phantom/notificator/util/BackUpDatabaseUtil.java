@@ -19,8 +19,9 @@ import java.sql.SQLException;
 public class BackUpDatabaseUtil {
 
     public static final int MAX_BACKUP_LIMIT = 20;
+    public static final String DATE_TIME_FORMAT = "dd-MM-yy_HH_mm_ss";
     private static final Logger LOGGER = LoggerFactory.getLogger(BackUpDatabaseUtil.class);
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("dd-MM-yy_hh_mm_ss");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
 
     public static void main(String[] args) throws SQLException {
 
