@@ -75,10 +75,11 @@ public class ConfirmDetails extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if (!newCarDetailsTable.getModel().getValueAt(0, 1).equals("")) {
+
+            Object tahografField = newCarDetailsTable.getModel().getValueAt(0, 1);
+            if (tahografField != null && !tahografField.equals("")) {
                 try {
-                    Object tahografExpiryDateObject = newCarDetailsTable.getModel().getValueAt(0, 1);
-                    tahografDate = tahografExpiryDateObject == null ? null : LocalDate.parse(tahografExpiryDateObject.toString());
+                    tahografDate = LocalDate.parse(tahografField.toString());
                 } catch (IllegalArgumentException exception) {
                     JOptionPane.showMessageDialog(panel, "Data Expirare Tahograf este incorecta!\n" +
                                     "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
