@@ -4,8 +4,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.phantom.notificator.Constants;
 
-import java.net.URL;
+import java.io.File;
 
 /**
  * Created by Master Victor on 03/07/2015.
@@ -16,9 +17,6 @@ import java.net.URL;
  */
 public class HibernateUtil {
 
-    private static final String PROD_DB_FILE_NAME = "vectorDB.mv.db";
-    private static final String URL_PREFIX = "jdbc:h2:file:";
-    private static final String URL_SUFFIX = ";IFEXISTS=TRUE;DB_CLOSE_DELAY=10;";
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
     public static SessionFactory getSessionFactory() {
@@ -31,7 +29,7 @@ public class HibernateUtil {
             Configuration configuration = new Configuration();
             configuration.getProperties().setProperty("hibernate.connection.username", PropertiesRetrievalUtil.getProperty("db"));
             configuration.getProperties().setProperty("hibernate.connection.password", PropertiesRetrievalUtil.getProperty("db_password"));
-            configuration.getProperties().setProperty("hibernate.connection.url", URL_PREFIX + getDbFilePath() + URL_SUFFIX);
+            configuration.getProperties().setProperty("hibernate.connection.url", Constants.URL_PREFIX + getDbFilePath() + Constants.URL_SUFFIX);
             configuration.configure();
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -46,15 +44,15 @@ public class HibernateUtil {
     }
 
     private static String getDbFilePath() {
-        URL resource = HibernateUtil.class.getClassLoader().getResource(PROD_DB_FILE_NAME);
+        File file = new File(Constants.DATABASE_DIRECTORY + Constants.PATH_SEPARATOR + Constants.PROD_DB_FILE_NAME);
         String absolutePath;
 
-        if (resource != null) {
-            absolutePath = resource.getPath();
-            // remove the first character, '\' and the suffix '.mv.db'
-            return absolutePath.substring(1, absolutePath.indexOf(".mv.db"));
+        if (file.exists()) {
+            absolutePath = file.getAbsolutePath();
+            // remove the the suffix '.mv.db'
+            return absolutePath.substring(0, absolutePath.indexOf(".mv.db"));
         } else {
-            throw new RuntimeException("File " + PROD_DB_FILE_NAME + " cannot be found. Check the file exists!");
+            throw new RuntimeException("File " + Constants.PROD_DB_FILE_NAME + " cannot be found. Check the file exists!");
         }
     }
 
