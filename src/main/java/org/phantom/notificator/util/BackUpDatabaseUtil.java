@@ -5,11 +5,11 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.phantom.notificator.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.URL;
 import java.sql.SQLException;
 
 /**
@@ -18,16 +18,8 @@ import java.sql.SQLException;
 // TODO: vic: When should this run?? (before starting ItpNotif, after starting ItpNotif, scheduled time of day etc.)
 public class BackUpDatabaseUtil {
 
-    public static final String BACKUP_TYPE = ".zip";
-    private static final String BACKUP_DIRECTORY = "backups";
-    private static final String PATH_SEPARATOR = "\\";
-    private static final String BACKUP_NAME_PREFIX = "vectorDB_backup_";
-    public static final String BACKUP_DIRECTORY_AND_NAME_PREFIX = BACKUP_DIRECTORY + PATH_SEPARATOR + BACKUP_NAME_PREFIX;
+    public static final int MAX_BACKUP_LIMIT = 20;
     private static final Logger LOGGER = LoggerFactory.getLogger(BackUpDatabaseUtil.class);
-    private static final String DB_NAME = "vectorDB";
-    private static final String DB_SUFFIX = ".mv.db";
-    private static final String PROD_DB_FILE_NAME = DB_NAME + DB_SUFFIX;
-    private static final int MAX_BACKUP_LIMIT = 20;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("dd-MM-yy_hh_mm_ss");
 
     public static void main(String[] args) throws SQLException {
@@ -35,12 +27,12 @@ public class BackUpDatabaseUtil {
         LOGGER.info("---->>> Database Backup Started ... <<<----");
 
         String currentDateTimeString = getCurrentDateTimeString();
-        String backupFileName = BACKUP_DIRECTORY_AND_NAME_PREFIX + currentDateTimeString + BACKUP_TYPE;
-        String databaseDirectoryPath = getDirectoryToFile(PROD_DB_FILE_NAME);
+        String backupFileName = Constants.BACKUP_DIRECTORY_AND_NAME_PREFIX + currentDateTimeString + Constants.BACKUP_TYPE;
+        String databaseDirectoryPath = getDirectoryToFile();
 
         Backup.execute(backupFileName,
                 databaseDirectoryPath,
-                DB_NAME,
+                Constants.PROD_DB_NAME,
                 false);
 
         LOGGER.info("---->>> Database backup completed!! New backup file is: {} <<<----", backupFileName);
@@ -49,7 +41,7 @@ public class BackUpDatabaseUtil {
 
     private static void deleteOldestBackupIfLimitExceeded(String backupFileName) {
         // Keep only MAX_BACKUP_LIMIT backups
-        File backupDirectory = new File(BACKUP_DIRECTORY);
+        File backupDirectory = new File(Constants.BACKUP_DIRECTORY);
 
         File[] backups = backupDirectory.listFiles();
         if (backups == null) {
@@ -101,8 +93,8 @@ public class BackUpDatabaseUtil {
 
     private static LocalDateTime getCreationDate(File file) {
         String fileName = file.getName();
-        int startIndexOfDate = BACKUP_NAME_PREFIX.length();
-        String fileCreationDateString = fileName.substring(startIndexOfDate, fileName.indexOf(BACKUP_TYPE));
+        int startIndexOfDate = Constants.BACKUP_NAME_PREFIX.length();
+        String fileCreationDateString = fileName.substring(startIndexOfDate, fileName.indexOf(Constants.BACKUP_TYPE));
         LOGGER.debug("---->>> Date string is: {} <<<----", fileCreationDateString);
         return DATE_TIME_FORMATTER.parseLocalDateTime(fileCreationDateString);
     }
@@ -111,15 +103,15 @@ public class BackUpDatabaseUtil {
         return DATE_TIME_FORMATTER.print(new DateTime());
     }
 
-    private static String getDirectoryToFile(String fileName) {
-        URL resource = BackUpDatabaseUtil.class.getClassLoader().getResource(fileName);
+    private static String getDirectoryToFile() {
+        File file = new File(Constants.PROD_DB_FILE_RELATIVE_PATH);
         String absolutePath;
 
-        if (resource != null) {
-            absolutePath = resource.getPath();
-            return absolutePath.substring(1, absolutePath.indexOf(fileName));
+        if (file.exists()) {
+            absolutePath = file.getAbsolutePath();
+            return absolutePath.substring(0, absolutePath.indexOf(Constants.PROD_DB_FILE_NAME));
         } else {
-            throw new RuntimeException("File " + fileName + " cannot be found. Check the file exists!");
+            throw new RuntimeException("File " + Constants.PROD_DB_FILE_RELATIVE_PATH + " cannot be found. Check the file exists!");
         }
     }
 }
