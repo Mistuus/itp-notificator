@@ -5,6 +5,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.phantom.notificator.Constants;
+import org.phantom.notificator.domain.Car;
+import org.phantom.notificator.domain.CarOwner;
 
 import java.io.File;
 
@@ -31,6 +33,8 @@ public class HibernateUtil {
             configuration.getProperties().setProperty("hibernate.connection.password", PropertiesRetrievalUtil.getProperty("db_password"));
             configuration.getProperties().setProperty("hibernate.connection.url", Constants.URL_PREFIX + getDbFilePath() + Constants.URL_SUFFIX);
             configuration.configure();
+            configuration.addAnnotatedClass(Car.class);
+            configuration.addAnnotatedClass(CarOwner.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
