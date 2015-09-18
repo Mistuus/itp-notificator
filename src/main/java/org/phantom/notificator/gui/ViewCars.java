@@ -61,6 +61,12 @@ public class ViewCars extends JFrame {
         removeButton.addActionListener(e -> {
             LOGGER.info("-->> User pressed RemoveButton. <<--");
             String carRegistrationNumber = getSelectedCarRegistrationNumber();
+
+            boolean isConfirmed = getUserConfirmation(carRegistrationNumber);
+            if (!isConfirmed) {
+                return;
+            }
+
             boolean isCarDeleted = carMapper.removeCar(carRegistrationNumber);
             if (isCarDeleted) {
                 JOptionPane.showMessageDialog(panel,
@@ -110,6 +116,12 @@ public class ViewCars extends JFrame {
             setVisible(false);
         });
         refreshButton.addActionListener(e -> refreshCarsTable());
+    }
+
+    private boolean getUserConfirmation(String carRegistrationNumber) {
+        int userChoice = JOptionPane.showConfirmDialog(panel, "Sunteti sigur ca vreti sa stergeti din sistem masina cu numarul " + carRegistrationNumber + "?\n\n" +
+                "!!NOTA!! Stergerea este permanenta.", "Confirmati stergerea din sistem?", JOptionPane.YES_NO_OPTION);
+        return userChoice == JOptionPane.YES_OPTION;
     }
 
     private String getSelectedCarRegistrationNumber() {
