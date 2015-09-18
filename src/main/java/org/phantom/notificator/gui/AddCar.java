@@ -71,15 +71,20 @@ public class AddCar extends JFrame {
         }
 
         LocalDate tahografExpiryDate;
-        try {
-            tahografExpiryDate = LocalDate.parse(tahografExpiryDateTextField.getText());
-        } catch (IllegalArgumentException exception) {
-            JOptionPane.showMessageDialog(panel, "Data Expirare Tahograf este incorecta!\n" +
-                            "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
-                    "Data Expirare Tahograf incorecta",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
+        if (!tahografExpiryDateTextField.getText().isEmpty()) {
+            try {
+                tahografExpiryDate = LocalDate.parse(tahografExpiryDateTextField.getText());
+            } catch (IllegalArgumentException exception) {
+                JOptionPane.showMessageDialog(panel, "Data Expirare Tahograf este incorecta!\n" +
+                                "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
+                        "Data Expirare Tahograf incorecta",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            tahografExpiryDate = null;
         }
+
         // Get the other text field values
         String carRegistrationNumber = carRegistrationNumberTextField.getText().toUpperCase();
         String firstName = firstNameTextField.getText();

@@ -75,15 +75,19 @@ public class ConfirmDetails extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            try {
-                Object tahografExpiryDateObject = newCarDetailsTable.getModel().getValueAt(0, 1);
-                tahografDate = tahografExpiryDateObject == null ? null : LocalDate.parse(tahografExpiryDateObject.toString());
-            } catch (IllegalArgumentException exception) {
-                JOptionPane.showMessageDialog(panel, "Data Expirare Tahograf este incorecta!\n" +
-                                "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
-                        "Data Expirare ITP incorecta",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
+            if (!newCarDetailsTable.getModel().getValueAt(0, 1).equals("")) {
+                try {
+                    Object tahografExpiryDateObject = newCarDetailsTable.getModel().getValueAt(0, 1);
+                    tahografDate = tahografExpiryDateObject == null ? null : LocalDate.parse(tahografExpiryDateObject.toString());
+                } catch (IllegalArgumentException exception) {
+                    JOptionPane.showMessageDialog(panel, "Data Expirare Tahograf este incorecta!\n" +
+                                    "Data trebuie sa fie de forma yyyy-MM-dd (Exemplu: 2015-01-24)",
+                            "Data Expirare ITP incorecta",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } else {
+                tahografDate = null;
             }
             owner.setFirstName(firstName);
             owner.setLastName(lastName);

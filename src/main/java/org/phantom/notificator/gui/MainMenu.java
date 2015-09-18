@@ -41,11 +41,6 @@ public class MainMenu extends JFrame {
             new AddCar(carMapper, carOwnerMapper);
             setVisible(false);
         });
-
-        modifyButton.addActionListener(e -> {
-            new SelectCars(carMapper, carOwnerMapper);
-            setVisible(false);
-        });
     }
 
     private void createUIComponents() {
