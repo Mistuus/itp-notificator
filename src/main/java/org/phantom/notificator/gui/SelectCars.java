@@ -1,5 +1,6 @@
 package org.phantom.notificator.gui;
 
+import org.phantom.notificator.Constants;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.mappers.CarOwnerMapper;
@@ -19,10 +20,11 @@ public class SelectCars extends JFrame {
     private JPanel panel1;
     private CarOwnerMapper carOwnerMapper;
     private CarMapper carMapper;
-    public SelectCars(CarMapper carMapper,CarOwnerMapper carOwnerMapper) {
+
+    public SelectCars(CarMapper carMapper, CarOwnerMapper carOwnerMapper) {
         super("Select Cars");
-        this.carMapper=carMapper;
-        this.carOwnerMapper=carOwnerMapper;
+        this.carMapper = carMapper;
+        this.carOwnerMapper = carOwnerMapper;
         add(panel1);
         pack();
         setLocationRelativeTo(null);
@@ -44,25 +46,23 @@ public class SelectCars extends JFrame {
     }
 
     private void createUIComponents() {
-        panel1=new JPanel();
-        panel1.setPreferredSize(new Dimension(500,500));
+        panel1 = new JPanel();
+        panel1.setPreferredSize(Constants.PREFERRED_SIZE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int height = screenSize.height;
         int width = screenSize.width;
         setSize(width / 2, height / 2);
-        Object rowData[][]=new Object[0][3];
-        Object columnNames[]={"Car Reg. No.","Date","Owner"};
-        table1=new JTable(new DefaultTableModel(rowData,columnNames) {
-            public boolean isCellEditable(int rowIndex, int columnIndex)
-            {
+        Object rowData[][] = new Object[0][3];
+        Object columnNames[] = {"Car Reg. No.", "Date", "Owner"};
+        table1 = new JTable(new DefaultTableModel(rowData, columnNames) {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         });
         table1.setPreferredSize(new Dimension(1000, 1000));
-        DefaultTableModel model=(DefaultTableModel) table1.getModel();
+        DefaultTableModel model = (DefaultTableModel) table1.getModel();
         model.addRow(columnNames);
-        for(Car car :carMapper.retrieveAllCars())
-        {
+        for (Car car : carMapper.retrieveAllCars()) {
             model.addRow(car.getRowData());
         }
     }

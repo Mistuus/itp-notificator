@@ -1,17 +1,16 @@
 package org.phantom.notificator.gui;
 
+import org.phantom.notificator.Constants;
 import org.phantom.notificator.mappers.CarMapper;
 import org.phantom.notificator.mappers.CarOwnerMapper;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Created by mihne on 8/26/2015.
  */
 @SuppressWarnings("DefaultFileTemplate")
 public class MainMenu extends JFrame {
-    private static final Dimension PREFERRED_SIZE = new Dimension(500, 500);
     private JButton modifyButton;
     private JButton viewCarsButton1;
     private JButton addButton;
@@ -25,7 +24,7 @@ public class MainMenu extends JFrame {
         this.carOwnerMapper = carOwnerMapper;
         add(panel);
         setUpButtonListeners();
-        setPreferredSize(PREFERRED_SIZE);
+        setPreferredSize(Constants.PREFERRED_SIZE);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);

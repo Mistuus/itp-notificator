@@ -1,6 +1,7 @@
 package org.phantom.notificator.gui;
 
 import org.joda.time.LocalDate;
+import org.phantom.notificator.Constants;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.mappers.CarMapper;
@@ -16,8 +17,6 @@ import java.util.Set;
  * Created by mihne_000 on 7/6/2015.
  */
 public class ConfirmDetails extends JFrame {
-    private static final String NEW_LINE = "\n";
-    private static final Dimension PREFERRED_SIZE = new Dimension(500, 500);
     private JButton backToMainMenuButton;
     private JTable oldClientDetailsTable;
     private JTable newClientDetailsTable;
@@ -43,7 +42,7 @@ public class ConfirmDetails extends JFrame {
         this.car = car;
         add(panel);
         setUpButtonListeners();
-        setPreferredSize(PREFERRED_SIZE);
+        setPreferredSize(Constants.PREFERRED_SIZE);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -117,10 +116,10 @@ public class ConfirmDetails extends JFrame {
     private StringBuilder getValidationErrorMessageForDisplay(Set<ConstraintViolation<CarOwner>> carOwnerValidationErrors, Set<ConstraintViolation<Car>> carValidationErrors) {
         StringBuilder errorMessageForDisplay = new StringBuilder();
         for (ConstraintViolation<Car> a : carValidationErrors) {
-            errorMessageForDisplay.append(a.getMessage()).append(NEW_LINE);
+            errorMessageForDisplay.append(a.getMessage()).append(Constants.NEW_LINE);
         }
         for (ConstraintViolation<CarOwner> a : carOwnerValidationErrors) {
-            errorMessageForDisplay.append(a.getMessage()).append(NEW_LINE);
+            errorMessageForDisplay.append(a.getMessage()).append(Constants.NEW_LINE);
         }
         return errorMessageForDisplay;
     }

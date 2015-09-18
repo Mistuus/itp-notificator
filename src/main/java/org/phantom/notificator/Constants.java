@@ -1,5 +1,7 @@
 package org.phantom.notificator;
 
+import java.awt.*;
+
 /**
  * Created by Victor on 18/09/2015.
  */
@@ -17,4 +19,13 @@ public class Constants {
     // Define common strings needed by to construct the DB arguments for H2
     public static final String URL_PREFIX = "jdbc:h2:file:";
     public static final String URL_SUFFIX = ";IFEXISTS=TRUE;DB_CLOSE_DELAY=10;";
+
+    // GUI constants
+    public static final Dimension PREFERRED_SIZE = new Dimension(500, 500);
+
+    // Common string constants
+    public static final String EMPTY_STRING = "";
+    public static final String NEW_LINE = "\n";
+    public static final String DOUBLE_NEW_LINE = "\n\n";
+    public static final String SPACE = " ";
 }

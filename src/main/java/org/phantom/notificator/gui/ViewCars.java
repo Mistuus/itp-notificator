@@ -1,5 +1,6 @@
 package org.phantom.notificator.gui;
 
+import org.phantom.notificator.Constants;
 import org.phantom.notificator.domain.Car;
 import org.phantom.notificator.domain.CarOwner;
 import org.phantom.notificator.mappers.CarMapper;
@@ -19,7 +20,6 @@ public class ViewCars extends JFrame {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ViewCars.class);
     private static final Dimension PREFERRED_DIMENSION = new Dimension(1000, 500);
-    private static final String EMPTY_STRING = "";
     private final CarOwnerMapper carOwnerMapper;
     private final CarMapper carMapper;
     private JTable carsTable;
@@ -116,7 +116,7 @@ public class ViewCars extends JFrame {
         int selectedRow = carsTable.getSelectedRow();
         int carRegistrationNumberColumn = 1;
         if (selectedRow < 0) {
-            return EMPTY_STRING;
+            return Constants.EMPTY_STRING;
         } else {
             return (String) carsTable.getValueAt(selectedRow, carRegistrationNumberColumn);
         }

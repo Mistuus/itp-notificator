@@ -36,14 +36,6 @@ public class ModifyCar extends JFrame {
             new MainMenu(carMapper, carOwnerMapper);
             setVisible(false);
         });
-        /*nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ConfirmDetails(carMapper,carOwnerMapper);
-                setVisible(false);
-            }
-        });*/
-
     }
 
     private void createUIComponents() {
