@@ -123,9 +123,6 @@ public class ViewCars extends JFrame {
     }
 
     private void createUIComponents() {
-        // Configure the panel to display the cars table
-        panel = new JPanel();
-
         // Create the JTable to display the cars
         Object rowData[][] = new Object[0][6];
         Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Firma", "Email", "Data exp. tahograf", "Data exp. ITP"};
