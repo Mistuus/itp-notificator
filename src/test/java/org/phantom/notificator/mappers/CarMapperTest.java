@@ -51,8 +51,8 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
     @Test
     public void testIsInvalidCar() {
         CarOwner testCarOwner = new CarOwner("Test", "User", "0741234567");
-        Car lessThan8Characters = new Car("abc", currentDateForTest, testCarOwner);
-        Car moreThan10Characters = new Car("abc 123 abc", currentDateForTest, testCarOwner);
+        Car lessThan8Characters = new Car("abc", saturdayCurrentDateForTest, testCarOwner);
+        Car moreThan10Characters = new Car("abc 123 abc", saturdayCurrentDateForTest, testCarOwner);
         Car noItpExpiryDate = new Car("AG 07 ABC", null, testCarOwner);
 
         Assert.assertFalse(mapper.getValidationErrorSet(lessThan8Characters).isEmpty());
@@ -103,13 +103,13 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
 
     @Test
     public void testDoNotChangeDetailsForNonExistentCar() {
-        Car nonExistentCar = new Car("AG 07 ABC", currentDateForTest, bunu);
+        Car nonExistentCar = new Car("AG 07 ABC", saturdayCurrentDateForTest, bunu);
         Assert.assertFalse(mapper.changeCarDetails(nonExistentCar));
     }
 
     @Test
     public void testAddCarToOwner() throws Exception {
-        Car carToAdd = new Car("AG 07 ABC", currentDateForTest, daniel);
+        Car carToAdd = new Car("AG 07 ABC", saturdayCurrentDateForTest, daniel);
         Assert.assertTrue(mapper.addCar(carToAdd));
         removeCar(carToAdd);
     }
@@ -126,7 +126,7 @@ public class CarMapperTest extends AbstractTestEnvironmentSetup {
         Car nonExistentCar;
         try {
             transaction = currentSession.beginTransaction();
-            nonExistentCar = (Car) currentSession.get(Car.class, car.getCarRegistrationNumber());
+            nonExistentCar = currentSession.get(Car.class, car.getCarRegistrationNumber());
             transaction.commit();
             return nonExistentCar;
         } catch (Exception e) {

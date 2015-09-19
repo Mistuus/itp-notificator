@@ -1,5 +1,6 @@
 package org.phantom.notificator.schedulers;
 
+import org.joda.time.DateTimeConstants;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.phantom.notificator.domain.Car;
@@ -19,10 +20,9 @@ import java.util.stream.Stream;
 /**
  * Created by Master Victor on 23/06/2015.
  */
-// TODO: vic: Backup DB
 public class DailyScheduler {
 
-    public static final Days DAYS_TO_NOTIFY_IN_ADVANCE = Days.SIX;
+    public static final Days DAYS_TO_NOTIFY_IN_ADVANCE = Days.SEVEN;
     private static final Logger LOGGER = LoggerFactory.getLogger(DailyScheduler.class);
     private List<Car> cars;
 
@@ -51,6 +51,9 @@ public class DailyScheduler {
      * Returns true if the current date + {@link #DAYS_TO_NOTIFY_IN_ADVANCE}
      * equals the itpExpiryDate OR the tahografExpiryDate of the car.
      * This tells us the car owner needs to be notified of the upcoming ITP or Tahograf Inspection.
+     * <p>
+     * If the current date is Sunday we will also notify the clients which should have been notified on Sunday.
+     * (This is due to the fact that no one works on Sunday => Daily Scheduler will not run)
      *
      * @param car Car to see if we need to notify client of upcoming ITP or Tahograf.
      * @return If the condition is true. False, otherwise.
@@ -60,7 +63,16 @@ public class DailyScheduler {
         LocalDate tahografExpiryDate = car.getTahografExpiryDate();
         LocalDate currentDate = getCurrentDate();
         LocalDate expectedExpiryDate = currentDate.plus(DAYS_TO_NOTIFY_IN_ADVANCE);
-        return expectedExpiryDate.equals(itpExpiryDate) || expectedExpiryDate.equals(tahografExpiryDate);
+        boolean shouldNotify = expectedExpiryDate.equals(itpExpiryDate) || expectedExpiryDate.equals(tahografExpiryDate);
+
+        if (currentDate.getDayOfWeek() == DateTimeConstants.SATURDAY) {
+            LocalDate sundayDate = currentDate.plus(Days.ONE);
+            expectedExpiryDate = sundayDate.plus(DAYS_TO_NOTIFY_IN_ADVANCE);
+            boolean shouldNotifyForTomorrow = expectedExpiryDate.equals(itpExpiryDate) || expectedExpiryDate.equals(tahografExpiryDate);
+            return shouldNotify || shouldNotifyForTomorrow;
+        } else {
+            return shouldNotify;
+        }
     }
 
     public Map<CarOwner, List<Car>> retrieveClientsToNotifyOfUpcomingItp() {

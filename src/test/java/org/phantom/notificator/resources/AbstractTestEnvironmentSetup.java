@@ -40,21 +40,21 @@ public abstract class AbstractTestEnvironmentSetup {
 
     public static List<CarOwner> carOwners;
     public static List<Car> expectedCars;
-    public static LocalDate currentDateForTest;
+    public static LocalDate saturdayCurrentDateForTest;
 
     public static void setUpCarsAndOwnersWithoutPersistingToDb() {
         LOGGER.info("---->>>> SETTING UP TEST ENVIRONMENT (No DB Setup)<<<<----");
         daysToNotifyInAdvance = DailyScheduler.DAYS_TO_NOTIFY_IN_ADVANCE;
-        currentDateForTest = new LocalDate(2015, 6, 29);
+        saturdayCurrentDateForTest = new LocalDate(2015, 9, 19);
 
         setUpCarOwners();
         LOGGER.info("---->>>> Car Owners Configured!! <<<<----");
-        setUpCars(currentDateForTest);
+        setUpCars(saturdayCurrentDateForTest);
         LOGGER.info("---->>>> Cars Configured!! <<<<----");
 
         // Create a mock of DailyScheduler to return a predefined date.
         spyDailyScheduler = spy(new DailyScheduler(expectedCars));
-        doReturn(currentDateForTest).when(spyDailyScheduler).getCurrentDate();
+        doReturn(saturdayCurrentDateForTest).when(spyDailyScheduler).getCurrentDate();
         LOGGER.info("---->>>> Itp Notificator Mocked!! <<<<----");
 
         LOGGER.info("---->>>> FINISHED SETTING UP TEST ENVIRONMENT (No DB Setup)<<<<----");

@@ -1,6 +1,7 @@
 package org.phantom.notificator.schedulers;
 
 import org.hamcrest.CoreMatchers;
+import org.joda.time.Days;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,6 +35,13 @@ public class DailySchedulerTest extends AbstractTestEnvironmentSetup {
     }
 
     @Test
+    public void testNotifySundayClient() throws Exception {
+        Car carNotifiableOnSunday = new Car("B 123 BCD", saturdayCurrentDateForTest.plus(daysToNotifyInAdvance).plus(Days.ONE), victor);
+        boolean isNotifiable = spyDailyScheduler.shouldNotifyOwner(carNotifiableOnSunday);
+        Assert.assertTrue(isNotifiable);
+    }
+
+    @Test
     public void testRetrieveCarsWithUpcomingItp() {
         Map<CarOwner, List<Car>> clientCarMap = spyDailyScheduler.retrieveClientsToNotifyOfUpcomingItp();
 
@@ -47,4 +55,5 @@ public class DailySchedulerTest extends AbstractTestEnvironmentSetup {
         List<Car> bunusCars = Collections.singletonList(bunusCarWithUpcomingItp);
         Assert.assertThat(listOfClientCars, CoreMatchers.hasItems(mihneasCars, bunusCars));
     }
+
 }
