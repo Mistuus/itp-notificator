@@ -3,5 +3,5 @@ ECHO Efectuam copia de rezerva a bazei de date Vector Truck Management...
 F:
 cd \Projects\itp-notificator
 :: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-cmd /k mvn -e compile exec:java -Dexec.mainClass="org\phantom\notificator\util\BackUpDatabaseUtil.java"
+cmd /k mvn -e compile exec:java -Dexec.mainClass="org.phantom.notificator.util.BackUpDatabaseUtil"
 ECHO Programul a terminat de copiat baza de date!
