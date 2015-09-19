@@ -61,6 +61,12 @@ public class ViewCars extends JFrame {
         removeButton.addActionListener(e -> {
             LOGGER.info("-->> User pressed RemoveButton. <<--");
             String carRegistrationNumber = getSelectedCarRegistrationNumber();
+
+            boolean isConfirmed = getUserConfirmation(carRegistrationNumber);
+            if (!isConfirmed) {
+                return;
+            }
+
             boolean isCarDeleted = carMapper.removeCar(carRegistrationNumber);
             if (isCarDeleted) {
                 JOptionPane.showMessageDialog(panel,
@@ -112,6 +118,12 @@ public class ViewCars extends JFrame {
         refreshButton.addActionListener(e -> refreshCarsTable());
     }
 
+    private boolean getUserConfirmation(String carRegistrationNumber) {
+        int userChoice = JOptionPane.showConfirmDialog(panel, "Sunteti sigur ca vreti sa stergeti din sistem masina cu numarul " + carRegistrationNumber + "?\n\n" +
+                "!!NOTA!! Stergerea este permanenta.", "Confirmati stergerea din sistem?", JOptionPane.YES_NO_OPTION);
+        return userChoice == JOptionPane.YES_OPTION;
+    }
+
     private String getSelectedCarRegistrationNumber() {
         int selectedRow = carsTable.getSelectedRow();
         int carRegistrationNumberColumn = 1;
@@ -123,9 +135,6 @@ public class ViewCars extends JFrame {
     }
 
     private void createUIComponents() {
-        // Configure the panel to display the cars table
-        panel = new JPanel();
-
         // Create the JTable to display the cars
         Object rowData[][] = new Object[0][6];
         Object columnNames[] = {"Proprietar", "Nr. inmatriculare", "Nr. Telefon.", "Firma", "Email", "Data exp. tahograf", "Data exp. ITP"};
