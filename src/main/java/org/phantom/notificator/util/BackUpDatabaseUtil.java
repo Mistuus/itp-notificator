@@ -15,7 +15,6 @@ import java.sql.SQLException;
 /**
  * Created by Victor on 15/09/2015.
  */
-// TODO: vic: When should this run?? (before starting ItpNotif, after starting ItpNotif, scheduled time of day etc.)
 public class BackUpDatabaseUtil {
 
     public static final int MAX_BACKUP_LIMIT = 20;

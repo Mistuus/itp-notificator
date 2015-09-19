@@ -22,5 +22,4 @@ import org.phantom.notificator.util.PropertiesRetrievalUtilTest;
         PropertiesRetrievalUtilTest.class
         })
 public class TestSuites {
-    // TODO: make sure all tests are added to the above suite
 }
