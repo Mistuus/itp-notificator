@@ -9,7 +9,6 @@ import org.phantom.notificator.mappers.CarOwnerMapper;
 
 import javax.swing.*;
 import javax.validation.ConstraintViolation;
-import java.awt.*;
 import java.util.Set;
 
 /**
@@ -53,10 +52,6 @@ public class AddCar extends JFrame {
         adaugaMasinaButton.addActionListener(e -> addCarFromUserInput());
     }
 
-    private void createUIComponents() {
-        panel = new JPanel(new BorderLayout());
-        panel.setFocusable(true);
-    }
 
     private void addCarFromUserInput() {
         LocalDate itpExpiryDate;

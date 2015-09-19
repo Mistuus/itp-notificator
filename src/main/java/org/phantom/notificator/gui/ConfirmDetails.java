@@ -10,7 +10,6 @@ import org.phantom.notificator.mappers.CarOwnerMapper;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.validation.ConstraintViolation;
-import java.awt.*;
 import java.util.Set;
 
 /**
@@ -145,7 +144,6 @@ public class ConfirmDetails extends JFrame {
     }
 
     private void createUIComponents() {
-        panel = new JPanel(new BorderLayout());
 
         Object rowDataWithInitialClientDetails[][] = {{owner.getFirstName(), owner.getLastName(), owner.getCompanyName(), owner.getEmail(), owner.getTelephoneNumber()}};//new Object[0][5];
         Object clientDetailsColumnNames[] = {"Prenume", "Nume", "Firma", "Email", "Nr. Telefon"};

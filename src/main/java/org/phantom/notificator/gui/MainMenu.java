@@ -45,6 +45,5 @@ public class MainMenu extends JFrame {
     private void createUIComponents() {
         addButton = new JButton();
         viewCarsButton1 = new JButton();
-        panel = new JPanel();
     }
 }
