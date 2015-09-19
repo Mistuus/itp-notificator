@@ -11,7 +11,6 @@ import javax.swing.*;
  */
 @SuppressWarnings("DefaultFileTemplate")
 public class MainMenu extends JFrame {
-    private JButton modifyButton;
     private JButton viewCarsButton1;
     private JButton addButton;
     private JPanel panel;
@@ -46,7 +45,6 @@ public class MainMenu extends JFrame {
     private void createUIComponents() {
         addButton = new JButton();
         viewCarsButton1 = new JButton();
-        modifyButton = new JButton();
         panel = new JPanel();
     }
 }
