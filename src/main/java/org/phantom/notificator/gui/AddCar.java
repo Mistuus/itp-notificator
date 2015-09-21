@@ -55,6 +55,7 @@ public class AddCar extends JFrame {
 
     private void addCarFromUserInput() {
         LocalDate itpExpiryDate;
+        // ITP must be a valid date
         try {
             itpExpiryDate = LocalDate.parse(itpExpiryDateTextField.getText());
         } catch (IllegalArgumentException exception) {
@@ -64,7 +65,7 @@ public class AddCar extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        // Tahograf must be a valid date
         LocalDate tahografExpiryDate;
         if (!tahografExpiryDateTextField.getText().isEmpty()) {
             try {
@@ -80,8 +81,11 @@ public class AddCar extends JFrame {
             tahografExpiryDate = null;
         }
 
+        // Validate car registration number
+        String carRegistrationNumber = validateInputCarRegistrationNumber();
+        if (carRegistrationNumber == null) return;
+
         // Get the other text field values
-        String carRegistrationNumber = carRegistrationNumberTextField.getText().toUpperCase();
         String firstName = firstNameTextField.getText();
         String lastName = lastNameTextField.getText();
         String companyName = companyNameTextField.getText();
@@ -99,6 +103,18 @@ public class AddCar extends JFrame {
         Car carToAdd = new Car(carRegistrationNumber, itpExpiryDate, owner);
         carToAdd.setTahografExpiryDate(tahografExpiryDate);
         validateAndInsert(owner, carToAdd);
+    }
+
+    private String validateInputCarRegistrationNumber() {
+        String userInputCarRegistrationNumber = carRegistrationNumberTextField.getText().toUpperCase();
+        boolean isValidCarRegistrationNumber = userInputCarRegistrationNumber.matches("[a-zA-z]{1,2}\\s[0-9]{2,3}\\s[a-zA-z]{3}");
+        if (!isValidCarRegistrationNumber) {
+            JOptionPane.showMessageDialog(panel, "Numarul de inregistrare al masinii nu este valid!\n" +
+                    "Trebuie sa fie de forma \"C(C) XX(X) CCC\", unde C - caracter, X - cifra, (C)(X) - caracter/cifra optional\n" +
+                    "Examplu: AG 22 BCD sau B 745 BCD");
+            return null;
+        }
+        return userInputCarRegistrationNumber;
     }
 
     private void validateAndInsert(CarOwner owner, Car carToAdd) {
