@@ -31,7 +31,7 @@ public class EmailSender {
     public static void main(String[] args) {
         EmailSender emailSender = new EmailSender();
         CarOwner daniel = new CarOwner("D", "P", "0000000000");
-        daniel.setEmail("daniel.patentasu@yahoo.com");
+        daniel.setEmail("vyctor_pat@yahoo.com");
         Car car = new Car("B 123 WWJ", new LocalDate(), daniel);
         Car car1 = new Car("B 725 MIH", new LocalDate(), daniel);
         HashMap<CarOwner, List<Car>> carOwnerToCar = new HashMap<>();
@@ -83,7 +83,7 @@ public class EmailSender {
     }
 
     private void sendEmailTo(String emailAddress, String messageBody) {
-        Session session = getSession(USERNAME, PASSWORD, getProperties());
+        Session session = createSession(USERNAME, PASSWORD, getProperties());
 
         try {
             Message msg = createEmail(emailAddress, messageBody, session);
@@ -104,7 +104,7 @@ public class EmailSender {
         return msg;
     }
 
-    private Session getSession(final String username, final String password, Properties props) {
+    private Session createSession(final String username, final String password, Properties props) {
         return Session.getInstance(props,
                 new Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
